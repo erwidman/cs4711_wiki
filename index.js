@@ -5,9 +5,9 @@ const server = http.createServer(app);
 app.use(express.static('public'));
 
 
-
+startServer();
 function startServer(){
-    const port;
+    var port;
     if(process.argv[2])
         port = process.argv[2];
     else

@@ -4,18 +4,26 @@ const app = express();
 const server = http.createServer(app);
 app.use(express.static('public'));
 
-const port = Number(process.argv[2]);
-if(!port){
-    console.error("!!ERROR : NO PORT SPECIFIED\n");
-    process.exit();
+
+
+function startServer(){
+    const port;
+    if(process.argv[2])
+        port = process.argv[2];
+    else
+        port = 8080;
+
+
+    server.listen(port,()=>{
+        console.log(`::running on port: ${port}`);
+        init();
+    })
+
+
+    function init(){
+
+    }
 }
 
-server.listen(port,()=>{
-    console.log(`::running on port: ${port}`);
-    init();
-})
 
-
-function init(){
-
-}
+module.exports = {startServer};

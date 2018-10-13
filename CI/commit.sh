@@ -17,6 +17,8 @@ then
     exit 0;
 fi
 
+printf "\n";
+
 #run unit test and code coverage
 numberOfTest=2
 passCounter=0

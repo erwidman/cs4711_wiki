@@ -65,6 +65,7 @@ then
             #commit and push
             git commit -m "$1" &> /dev/null;
             echo "~ attempting push";
+            printf '\n';
             echo $(git push origin dev) 
         fi
 

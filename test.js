@@ -14,10 +14,21 @@ describe("Working on dbInterface.js",function(){
         assert.equal(result,true);
     });
 
+    it("-Testing add image",async function(){
+        let result = await db.addImage(100,"100x100","20MB","This is it");
+        assert.equal(result,true);
+    })
+
     it("-Testing nonunique username createUser",async function(){
         let result = await db.createUser("zigzig","1234");
+        console.log(result);
         assert.notEqual(result,true);
     });
+
+    it("-Testing getUserId",async function(){
+        let result = await db.getUserID("zigzig");
+        assert.equal(result>0,true);
+    })
 
     it("-Testing login functions",async function(){
         let result = await db.login("zigzig","1234");
@@ -44,6 +55,8 @@ describe("Working on dbInterface.js",function(){
         assert.equal(result,true);
     });
 
+ 
+
 
     it("-Testing create article, lock article, and update article",async function(){
         db.createArticle(200,"Another article","sl");
@@ -55,6 +68,7 @@ describe("Working on dbInterface.js",function(){
         result = await db.updateArticle(1000,artid,"This is the replaced test");
         assert.equal(result,true);
     });
+
 
 
 

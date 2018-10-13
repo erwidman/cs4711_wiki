@@ -117,6 +117,21 @@ function addToBlacklist(ip){
 }
 
 
+function getUserID(username){
+    let db = getDB();
+    return new Promise((res,rej)=>{
+        db.get('select userid from users where username=?',[username],(err,row)=>{
+            if(err){
+                console.error(err);
+                res(false);
+            }
+            else
+                res(row.userid);
+        });
+    });
+    
+}
+
 
 function createArticle(owner,title,content){
     let timestamp = getTimestamp();
@@ -193,6 +208,11 @@ function updateArticle(userid,articleid,updatedContent){
 }
 
 
+function addImage(owner,dimensions,filesize,comment){
+    return new Promise((res,rej)=>runSQL('insert into images(uploadTime,owner,dimensions,filesize,comment) values (?,?,?,?,?)',[getTimestamp(),owner,dimensions,filesize,comment],res,rej));
+}
+
+
 
 process.on('exit',closeConnection);
 
@@ -205,5 +225,7 @@ module.exports = {
     removeFromBlacklist,
     createArticle,
     lockArticle,
-    updateArticle
+    updateArticle,
+    getUserID,
+    addImage
 };

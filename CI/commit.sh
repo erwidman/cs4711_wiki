@@ -1,3 +1,11 @@
+isDevBranch=$(git branch | grep "* dev")
+if [ "$isDevBranch" == "" ]
+then
+    echo "~ not on dev branch";
+    exit 1
+fi
+
+
 numberOfTest=2
 passCounter=0
 
@@ -38,7 +46,7 @@ then
         then
             echo "~ no commit message provided";
         else
-            git commit -m "$1";
+            git commit -m "$1" &> /dev/null;
             echo "~ attempting push";
             echo $(git push origin dev) 
         fi

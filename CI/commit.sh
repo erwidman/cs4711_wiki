@@ -42,7 +42,6 @@ else
     echo "- failed code coverage";
 fi
 
-printf "\n";
 echo "~ $counter/$numberOfTest tests passed!";
 printf "\n";
 

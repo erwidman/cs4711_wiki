@@ -40,7 +40,7 @@ then
         else
             git commit -m "$1";
             echo "~ attempting push";
-            echo git push origin dev 
+            echo $(git push origin dev) 
         fi
 
     fi 

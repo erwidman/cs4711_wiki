@@ -6,7 +6,8 @@
   "scripts": {
     "test": "nyc mocha",
     "testWithLog" : "nyc mocha -R spec",
-    "start": "node index.js 8080"
+    "start": "node index.js 8080",
+    "checkin" : "bash ./CI/commit.sh $1"
   },
   "author": "",
   "license": "ISC",

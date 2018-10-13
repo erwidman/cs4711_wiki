@@ -148,16 +148,17 @@ function updateArticle(userid,articleid,updatedContent){
         setTimeout(()=>updateArticle(userid,articleid,updatedContent),100);
         return false;
     }
-    
+    updatedInProgress = true;
     let timestamp = getTimestamp();
     return new Promise((res,rej)=>{
         let db = getDB();
-        updatedInProgress = true;
         db.exec("BEGIN");
         let sql = `update articles set content=?, lastUpdated=? where articleid=?`;
         db.run(sql,[updatedContent,timestamp,articleid],(err)=>{
-            if(err)
+            if(err){
+                updateInProgress = false;
                 res(err);
+            }
             else
                 res(true);
         });
@@ -173,19 +174,18 @@ function updateArticle(userid,articleid,updatedContent){
         else{
             let sql = 'insert into articleHistory(articleid,userid,updateTime,newContent) values (?,?,?,?)';
             return new Promise((res,rej)=>{
-                db.run(sql,[articleid,userid,timestamp,updatedContent],(err)=>{
-                    if(err){
-                        updateInProgress = false;
-                        db.exec("ROLLBACK");
-                        res(err);
-                    }
-                    else{
-                        updateInProgress = false;
-                        db.exec('COMMIT');
-                        res(true);
-                    }
-                   
-                });
+            db.run(sql,[articleid,userid,timestamp,updatedContent],(err)=>{
+                if(err){
+                    db.exec("ROLLBACK");
+                    res(err);
+                }
+                else{
+                    db.exec('COMMIT');
+                    res(true);
+                }
+                updateInProgress = false;
+               
+            });
             });
         }
 

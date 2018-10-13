@@ -1,0 +1,16 @@
+On branch dev
+Changes not staged for commit:
+	modified:   package.json
+	modified:   private/data/main.db
+	modified:   private/dbInterface.js
+	modified:   test.js
+
+Untracked files:
+	CI/
+	commit.sh
+	commitStatus
+	gitStatus
+	grep
+	testdata
+
+no changes added to commit

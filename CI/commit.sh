@@ -1,3 +1,5 @@
+
+#check if on dev branch
 isDevBranch=$(git branch | grep "* dev")
 if [ "$isDevBranch" == "" ];
 then
@@ -6,6 +8,7 @@ then
     exit 0
 fi
 
+#check if dev is up to date
 isPulled=$(git pull origin dev | grep "Already up to date.")
 if [ "$isPulled" == "" ];
 then
@@ -14,10 +17,9 @@ then
     exit 0;
 fi
 
-
+#run unit test and code coverage
 numberOfTest=2
 passCounter=0
-
 npm test > testdata 2> /dev/null
 
 unitTestPass=$(cat testdata);
@@ -42,19 +44,23 @@ printf "\n";
 echo "~ $counter/$numberOfTest tests passed!";
 printf "\n";
 
+#if the test were passex
 if [ "$counter" == "$numberOfTest" ];
 then
+    #check if files are added to commit
     echo "~ checking git status";
     statusPass=$(git status | grep "no changes added to commit")
     if [ "$statusPass" != "" ];
     then
         echo "~ no changes to commit";
     else
+        #check if argument was provided for commit message
         echo "~ attempting to commit changes";
         if [ "$1" == "" ];
         then
             echo "~ no commit message provided";
         else
+            #commit and push
             git commit -m "$1" &> /dev/null;
             echo "~ attempting push";
             echo $(git push origin dev) 

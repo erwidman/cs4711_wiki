@@ -1,8 +1,17 @@
 isDevBranch=$(git branch | grep "* dev")
-if [ "$isDevBranch" == "" ]
+if [ "$isDevBranch" == "" ];
 then
     echo "~ not on dev branch";
-    exit 1
+    printf "\n";
+    exit 0
+fi
+
+isPulled=$(git pull origin dev | grep "Already up to date.")
+if [ "$isPulled" == "" ];
+then
+    echo "~ branch is not in sync with dev - pull first";
+    printf "\n";
+    exit 0;
 fi
 
 

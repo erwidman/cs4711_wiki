@@ -3,10 +3,12 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 const db = require(__dirname+'/private/dbInterface.js');
-
-
 app.use(express.static(__dirname+'/public'));
 
+//watch for restart
+fs.watch(`${__dirname}/private`,(eventType,filename)=>{
+    console.log(eventType);
+});
 
 startServer();
 function startServer(){

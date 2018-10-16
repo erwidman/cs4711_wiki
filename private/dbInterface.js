@@ -3,7 +3,7 @@ const crypto = require('crypto'),
     algorithm = 'aes-256-ctr',
     password = 'd6F3Efeq';
 const dbFile = `${__dirname}/../data/main.db`;
-//test 2
+//test 3
 
 
 //_________________GENERAL USE DB FUNCS

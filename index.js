@@ -9,7 +9,7 @@ app.use(express.static(__dirname+'/public'));
 //watch for restart
 var chokidar = require('chokidar');
 // One-liner for current directory, ignores .dotfiles
-chokidar.watch('.', {ignored: /(^|[\/\\])\../}).on('all', (event, path) => {
+chokidar.watch(`${__dirname}/private`, {ignored: /(^|[\/\\])\../}).on('change', (event, path) => {
   console.log(event, path);
 });
 

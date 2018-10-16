@@ -65,7 +65,7 @@ then
             git commit -m "$1" &> /dev/null;
             echo "~ attempting push";
             printf '\n';
-            gitPass=$(git push origin dev 2>&1 | grep "Resolving deltas: 100%")
+            gitPass=$(git push origin dev 2> | grep "To https://github.com/erwidman/cs4711_wiki.git")
             echo "$gitPass"
             #if push was successful 9
             if [ "$gitPass" == "" ] ;

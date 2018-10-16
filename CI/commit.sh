@@ -72,7 +72,9 @@ then
             then
                echo "~ push failed!";
             else 
-               echo $(pwd);
+               #transfer files to dev instance
+               scp -r CI package.json public tmp index.js package-lock.json private test.js  dev@69.55.61.80:~/dev
+
             fi
         fi
 

@@ -2,11 +2,11 @@ const http = require('http');
 const express = require('express');
 const app = express();
 const server = http.createServer(app);
-const db = require('./private/dbInterface.js');
+const db = require(__dirname+'/private/dbInterface.js');
 
 
-app.use(express.static('public'));
-//test
+app.use(express.static(__dirname+'/public'));
+
 
 startServer();
 function startServer(){

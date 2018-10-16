@@ -65,7 +65,7 @@ then
             git commit -m "$1" &> /dev/null;
             echo "~ attempting push";
             printf '\n';
-            gitPass=$(git push origin dev | grep "Resolving deltas: 100%")
+            gitPass=$(git push origin dev 2>&1 | grep "Resolving deltas: 100%")
             echo "$gitPass"
             #if push was successful 6
             if [ "$gitPass" == "" ] ;

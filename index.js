@@ -3,8 +3,10 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 const db = require('./private/dbInterface.js');
-app.use(express.static('public'));
 
+
+app.use(express.static('public'));
+//test
 
 startServer();
 function startServer(){

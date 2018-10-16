@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const crypto = require('crypto'),
     algorithm = 'aes-256-ctr',
     password = 'd6F3Efeq';
-const dbFile = `${__dirname}/data/main.db`;
+const dbFile = `${__dirname}/../data/main.db`;
 
 
 

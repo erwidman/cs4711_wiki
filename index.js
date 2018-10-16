@@ -9,7 +9,7 @@ app.use(express.static(__dirname+'/public'));
 
 //watch for restart
 fs.watch(`${__dirname}/private`,(eventType,filename)=>{
-    console.log(eventType);
+    console.log(`${eventType} ${filename}`);
 });
 
 startServer();

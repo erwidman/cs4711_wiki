@@ -31,10 +31,11 @@ function startServer(){
     });
 }
 
-
+var rebootTimeout;
 function rebootProcess(){
     execSync("npm install",{cwd:`${__dirname}`});
-    setTimeout(()=>process.exit(),5000);   
+    clearTimeout(rebootTimeout);
+    rebootTimeout = setTimeout(()=>process.exit(),5000);   
 }
 
 

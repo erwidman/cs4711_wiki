@@ -3,7 +3,7 @@ const crypto = require('crypto'),
     algorithm = 'aes-256-ctr',
     password = 'd6F3Efeq';
 const dbFile = `${__dirname}/../data/main.db`;
-
+//test 2
 
 
 //_________________GENERAL USE DB FUNCS
@@ -15,8 +15,10 @@ function getDB(){
     return global_db;
 }
 function closeConnection(){
-    global_db.close();
-    global_db = null;
+    if(global_db){
+        global_db.close();
+        global_db = null;
+    }
 }
 function commitDB(db){
     //db.exec("COMMIT");

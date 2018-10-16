@@ -33,8 +33,8 @@ function startServer(){
 
 
 function rebootProcess(){
-    execSync("npm install");
-    process.exit();
+    execSync("npm install",{cwd:`${__dirname}`});
+    setTimeout(()=>process.exit(),5000);   
 }
 
 

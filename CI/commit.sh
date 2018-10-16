@@ -67,12 +67,12 @@ then
             printf '\n';
             gitPass=$(git push origin dev | grep "Resolving deltas: 100%")
             echo "$gitPass"
-            #if push was successful
-            if [ "$gitPass" != "" ] ;
+            #if push was successful 1
+            if [ "$gitPass" == "" ] ;
             then
-                echo $(pwd);
-            else
-                echo "~ push failed!"
+               echo "~ push failed!";
+            else 
+               echo $(pwd);
             fi
         fi
 

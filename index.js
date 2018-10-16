@@ -2,14 +2,15 @@ const http = require('http');
 const express = require('express');
 const app = express();
 const server = http.createServer(app);
-const fs = require('fs');
 const db = require(__dirname+'/private/dbInterface.js');
 
 app.use(express.static(__dirname+'/public'));
 
 //watch for restart
-fs.watch(`${__dirname}/private`,(eventType,filename)=>{
-    console.log(`${eventType} ${filename}`);
+var chokidar = require('chokidar');
+// One-liner for current directory, ignores .dotfiles
+chokidar.watch('.', {ignored: /(^|[\/\\])\../}).on('all', (event, path) => {
+  console.log(event, path);
 });
 
 startServer();

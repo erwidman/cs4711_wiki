@@ -2,7 +2,9 @@ const http = require('http');
 const express = require('express');
 const app = express();
 const server = http.createServer(app);
+const fs = require('fs');
 const db = require(__dirname+'/private/dbInterface.js');
+
 app.use(express.static(__dirname+'/public'));
 
 //watch for restart

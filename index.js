@@ -7,28 +7,24 @@ const fs = require('fs');
 
 const db = require(__dirname+'/private/dbInterface.js');
 
-
-app.use(express.static(__dirname+'/public'));
-
 //watch for restart
-var chokidar = require('chokidar');
-// One-liner for current directory, ignores .dotfiles
-chokidar.watch([`${__dirname}/private`,`${__dirname}/index.js`], {ignored: /(^|[\/\\])\../}).on('change', (path,event) => {
-    console.log(path);
+require('chokidar').watch([`${__dirname}/private`,`${__dirname}/index.js`], {ignored: /(^|[\/\\])\../}).on('change', (path,event) => {
+    console.log(`~ change at path: ${path}\n~ restarting process`);
     rebootProcess();
 });
-// another test test
 
 startServer();
 function startServer(){
+    app.use(express.static(__dirname+'/public'));
+
+
     let port = process.argv[2] ? process.argv[2] : 8080;
     server.listen(port,()=>{
-        console.log(`::running on port: ${port}`);
+        console.log(`~ running on port: ${port}`);
     });
 }
 
 var rebootTimeout;
-//test
 function rebootProcess(){
     execSync("npm install",{cwd:`${__dirname}`});
     clearTimeout(rebootTimeout);

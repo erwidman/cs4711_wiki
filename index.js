@@ -9,6 +9,7 @@ const db = require(__dirname+'/private/dbInterface.js');
 
 //watch for restart
 require('chokidar').watch([`${__dirname}/private`,`${__dirname}/index.js`], {ignored: /(^|[\/\\])\../}).on('change', (path,event) => {
+    //print proc
     console.log(`~ change at path: ${path}\n~ restarting process`);
     rebootProcess();
 });

@@ -21,11 +21,7 @@ chokidar.watch([`${__dirname}/private`,`${__dirname}/index.js`], {ignored: /(^|[
 
 startServer();
 function startServer(){
-    var port;
-    if(process.argv[2])
-        port = process.argv[2];
-    else
-        port = 8080;
+    let port = process.argv[2] ? process.argv[2] : 8080;
     server.listen(port,()=>{
         console.log(`::running on port: ${port}`);
     });

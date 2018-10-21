@@ -8,7 +8,7 @@ const fs = require('fs');
 
 
 //watch for restart
-require('chokidar').watch([`${__dirname}/private`,`${__dirname}/index.js`], {ignored: /(^|[\/\\])\../}).on('change', (path,event) => {
+const watcher = require('chokidar').watch([`${__dirname}/private`,`${__dirname}/index.js`], {ignored: /(^|[\/\\])\../}).on('change', (path,event) => {
     //print proc
     console.log(`~ change at path: ${path}\n~ restarting process`);
     rebootProcess();
@@ -29,11 +29,12 @@ function stopServer(){
     process.exit(0);
 }
 
-var rebootTimeout;
+
 function rebootProcess(){
+    watcher.close();
     execSync("npm install --suppress-warnings",{cwd:`${__dirname}`});
     clearTimeout(rebootTimeout);
-    rebootTimeout = setTimeout(()=>process.exit(),5000);   
+    setTimeout(()=>process.exit(),5000);   
 }
 
 module.exports = {

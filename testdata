@@ -1,0 +1,41 @@
+
+> process_wiki@1.0.0 test /Users/ericwidmann/Desktop/Workspace/process_wiki
+> nyc mocha
+
+
+
+  Working on dbInterface.js
+~ userid 287
+    ✓ -Testing createUser
+~ imageid 118
+    ✓ -Testing add image
+{ Error: SQLITE_CONSTRAINT: UNIQUE constraint failed: users.username errno: 19, code: 'SQLITE_CONSTRAINT' }
+    ✓ -Testing nonunique username createUser
+    ✓ -Testing getUserId
+    ✓ -Testing login functions
+    ✓ -Testing failed login
+    ✓ -Testing ipBlacklist addToBlacklist
+    ✓ -Testing ipBlacklist duplicate add
+    ✓ -Testing ipBlacklist removeFromBlacklist
+null
+true
+    ✓ -Testing create article, lock article, and update article
+
+  Working appBinding.js
+~ running on port: 8080
+    ✓ -check anon exist
+
+
+  11 passing (262ms)
+
+----------------------|----------|----------|----------|----------|-------------------|
+File                  |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
+----------------------|----------|----------|----------|----------|-------------------|
+All files             |    68.25 |    44.78 |    76.14 |    67.51 |                   |
+ process_wiki         |    68.42 |       50 |       40 |    72.22 |                   |
+  index.js            |    68.42 |       50 |       40 |    72.22 |    13,14,29,30,31 |
+ process_wiki/private |    68.23 |    44.62 |    78.31 |    67.04 |                   |
+  appBinding.js       |    12.12 |        0 |     8.33 |    12.12 |... 56,59,62,63,66 |
+  dbInterface.js      |    79.87 |    63.04 |     91.3 |    79.43 |... 41,261,266,285 |
+  main.js             |       80 |      100 |       50 |       80 |                 7 |
+----------------------|----------|----------|----------|----------|-------------------|

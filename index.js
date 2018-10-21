@@ -24,10 +24,19 @@ function startServer(){
     });
 }
 
+function stopServer(){
+    server.close();
+    process.exit(0);
+}
+
 var rebootTimeout;
 function rebootProcess(){
     execSync("npm install --suppress-warnings",{cwd:`${__dirname}`});
     clearTimeout(rebootTimeout);
     rebootTimeout = setTimeout(()=>process.exit(),5000);   
 }
+
+module.exports = {
+    stopServer
+};
 

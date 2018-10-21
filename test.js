@@ -97,13 +97,18 @@ describe("Working on dbInterface.js",function(){
 const axios = require('axios');
 
 describe("Working appBinding.js",function(){
+    let server;
     before(function(){
-        require(`${__dirname}/index.js`);
+        server = require(`${__dirname}/index.js`);
     });
 
     it("-check anon exist",async function(){
         let id = await db.getUserID('anon');
         assert(id>=0,true);
+    });
+
+    after(function(){
+        server.stopServer();
     });
 
 });

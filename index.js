@@ -29,6 +29,7 @@ function stopServer(){
     process.exit(0);
 }
 
+//a test
 
 function rebootProcess(){
     watcher.close();

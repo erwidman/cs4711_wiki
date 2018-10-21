@@ -55,20 +55,17 @@ const routines = {
     },
     removeUser : function(args,db,auth){
         return new Promise((resolve, reject) => {
-            console.log(args);
             if(!verifyArgs(args,1,['string']))
                 reject('invalid_arg');
             auth = auth.split('?~?~?');
             let user = auth[0];
             let pass = auth[1];
             let uname = args[0];
-            console.log(auth);
             db.login(user,pass)
             .then((result)=>{
                 if(result){
                     db.removeUser(uname)
                     .then((stat)=>{
-
                         if(stat===true)
                             resolve(true);
                         else

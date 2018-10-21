@@ -34,7 +34,6 @@ function stopServer(){
 function rebootProcess(){
     watcher.close();
     execSync("npm install --suppress-warnings",{cwd:`${__dirname}`});
-    clearTimeout(rebootTimeout);
     setTimeout(()=>process.exit(),5000);   
 }
 

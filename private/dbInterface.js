@@ -26,7 +26,6 @@ function commitDB(db){
 function standardCallback(err,db,res,rej){
     commitDB(db);
     if(err){
-        console.error(err);
         res(err);
     }
     else
@@ -36,6 +35,37 @@ function runSQL(sql,bindings,res,rej){
     let db = getDB();
     db.run(sql,bindings,(err)=>standardCallback(err,db,res,rej));
 }
+function checkExistSQL(sql,bindings,property,res,rej){
+    let db = getDB();
+    db.get(sql,bindings,(err,row)=>{
+        if(!row || !row[property])
+            res(err)
+        else
+            res(row[property]);
+    });
+}
+
+function getRowSQL(sql,bindings,property,res,rej){
+    let db = getDB();
+    db.get(sql,bindings,(err,row)=>{
+        if(!row || !row[property])
+            res(err)
+        else
+            res(row);
+    });
+}
+
+
+function getAllSQL(sql,bindings,res,rej){
+    let db = getDB();
+    db.all(sql,bindings,(err,rows)=>{
+        if(!rows)
+            res(err)
+        else
+            res(rows)
+    });
+}
+
 
 
 //_________________HELPERS
@@ -67,6 +97,19 @@ function createUser(username,password){
     return new Promise((res,rej)=>{
         password = encrypt(password).toString('base64');
         runSQL(`insert into users(username,password) values (?,?)`,[username,password],res,rej);
+    })
+    .then((result)=>{
+        if(result!==true)
+            return result;
+        let db = getDB();
+        return new Promise((res,rej)=>{
+        db.get('select userid from users where username=?',[username],(err,row)=>{
+            if(err || !(row))
+                res(err);
+            else
+                res(row.userid);
+        });
+        });
     });
 }
 
@@ -110,6 +153,7 @@ function login(username,password){
     });
 }
 
+
 function removeFromBlacklist(ip){
     return new Promise((res,rej)=>runSQL(`delete from ipBlacklist where ipaddr=?`,[ip],res,rej));
 }
@@ -118,6 +162,9 @@ function addToBlacklist(ip){
     return new Promise((res,rej)=>runSQL(`insert into ipBlacklist(ipaddr) values (?)`,[ip],res,rej));
 }
 
+function checkBlacklist(ip){
+    return new Promise((res,rej)=>checkExistSQL('select * from ipBlacklist where ip=?',[ip],'ipaddr',res,rej));
+}
 
 function getUserID(username){
     let db = getDB();
@@ -161,15 +208,12 @@ function lockArticle(articleid){
 
 var updateInProgress = false;
 function updateArticle(userid,articleid,updatedContent){
-    if(updateInProgress){
-        setTimeout(()=>updateArticle(userid,articleid,updatedContent),100);
-        return false;
-    }
-    updatedInProgress = true;
+    let db = getDB();
+    return new Promise((finalres,finalrej)=>{
+    db.serialize(()=>{
     let timestamp = getTimestamp();
-    return new Promise((res,rej)=>{
-        let db = getDB();
-        db.exec("BEGIN");
+    new Promise((res,rej)=>{
+        db.exec('BEGIN');
         let sql = `update articles set content=?, lastUpdated=? where articleid=?`;
         db.run(sql,[updatedContent,timestamp,articleid],(err)=>{
             if(err){
@@ -186,33 +230,80 @@ function updateArticle(userid,articleid,updatedContent){
             db.exec("ROLLBACK");
             updateInProgress = false;
             console.error(success);
-            return err;
+            finalres(success);
         }
         else{
             let sql = 'insert into articleHistory(articleid,userid,updateTime,newContent) values (?,?,?,?)';
-            return new Promise((res,rej)=>{
             db.run(sql,[articleid,userid,timestamp,updatedContent],(err)=>{
+                console.log(err);
                 if(err){
                     db.exec("ROLLBACK");
-                    res(err);
+                    finalres(err);
                 }
                 else{
                     db.exec('COMMIT');
-                    res(true);
+                    finalres(true);
                 }
-                updateInProgress = false;
-               
-            });
             });
         }
 
+    })
+    });
     });
 }
 
 
 function addImage(owner,dimensions,filesize,comment){
-    return new Promise((res,rej)=>runSQL('insert into images(uploadTime,owner,dimensions,filesize,comment) values (?,?,?,?,?)',[getTimestamp(),owner,dimensions,filesize,comment],res,rej));
+    let timestamp = getTimestamp();
+    return new Promise((res,rej)=>runSQL('insert into images(uploadTime,owner,dimensions,filesize,comment) values (?,?,?,?,?)',[getTimestamp(),owner,dimensions,filesize,comment],res,rej))
+    .then((result)=>{
+        if(!result)
+            return false;
+        let db = getDB();
+        return new Promise((res,rej)=>{
+            db.get('select * from images where owner=? order by imageid desc',[owner],(err,row)=>{
+                if(!row || !row.imageid)
+                    res(err)
+                else
+                    res(row.imageid);
+            });
+        });
+       
+    });
 }
+
+
+function deleteImage(imageid){
+    return new Promise((res,rej)=>runSQL("delete from images where imageid=?",[imageid],res,rej));
+}
+
+
+
+//_______________________________GETTERS
+
+function getImage(imageid){
+    return new Promise((res,rej)=>getRowSQL('select * from images where imageid=?',[imageid],'imageid',res,rej));
+}
+
+function getAllImages(){
+    return new Promise((res,rej)=>getAllSQL('select * from images',[],res,rej));
+}
+
+function getAllArticles(){
+    return new Promise((res,rej)=>getAllSQL('select articleid, owner, initUploadDate, lastUpdated, isEditable, title from articles',[],res,rej));
+}
+
+function getArticle(articleid){
+    return new Promise((res,rej)=> getRowSQL('select * from articles where articleid=?',[articleid],'articleid',res,rej));
+}
+
+function getArticleHistory(articleid){
+    return new Promise((res,rej)=>getAllSQL('select * from articleHistory where articleid=?',[articleid],res,rej));
+}
+
+
+
+//_______________________________
 
 
 
@@ -225,9 +316,17 @@ module.exports = {
     removeUser,
     addToBlacklist,
     removeFromBlacklist,
+    checkBlacklist,
     createArticle,
     lockArticle,
     updateArticle,
     getUserID,
-    addImage
+    addImage,
+    deleteImage,
+    getDB,
+    getImage,
+    getAllImages,
+    getAllArticles,
+    getArticle,
+    getArticleHistory
 };

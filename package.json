@@ -12,12 +12,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "chai": "^4.2.0",
     "chokidar": "^2.0.4",
     "express": "^4.16.4",
     "mocha": "^5.2.0",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "striptags": "^3.1.1"
   },
+  "repository": {},
   "devDependencies": {
     "nyc": "^13.0.1"
   }

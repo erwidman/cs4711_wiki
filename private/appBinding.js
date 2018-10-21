@@ -10,40 +10,92 @@ function verifyArgs(args,length,types){
     return true;
 }
 
+function collectArgs(params){
+    let index =0;
+    let final = [];
+
+    while(params[index+'']){
+        final.push(params[index]);
+        index++;
+    }
+    return final;
+}
 
 const routines = {
     createUser : function(args,db,auth){
         return new Promise((resolve, reject) => {
             args[1] = auth;
+
             if(!verifyArgs(args,2,['string','string']))
                 reject('invalid_arg');
-
-            uname = args[0].striptags(uname);
+            let uname = striptags(args[0]);
             db.createUser(uname,auth)
             .then((result) => {
                 if(typeof result !== 'object')
-                    return result;
+                    resolve(result);
                 else{
                     console.error(result);
-                    rej('unable_to_create_user');
+                    reject('unable_to_create_user');
                 }
             });
             
 
-        })
+        });
+    },
+    login : function(args,db,auth){
+        return new Promise((resolve, reject) => {
+            args[1] = auth;
+            if(!verifyArgs(args,2,['string','string']))
+                reject('invalid_arg');
+            let uname = striptags(args[0]);
+            db.login(uname,auth)
+            .then((result)=>resolve(result))
+            .catch((err)=>reject(err));
+        });
+    },
+    removeUser : function(args,db,auth){
+        return new Promise((resolve, reject) => {
+            console.log(args);
+            if(!verifyArgs(args,1,['string']))
+                reject('invalid_arg');
+            auth = auth.split('?~?~?');
+            let user = auth[0];
+            let pass = auth[1];
+            let uname = args[0];
+            console.log(auth);
+            db.login(user,pass)
+            .then((result)=>{
+                if(result){
+                    db.removeUser(uname)
+                    .then((stat)=>{
+
+                        if(stat===true)
+                            resolve(true);
+                        else
+                            reject();
+                    });
+                }
+            })
+            .catch((err)=>reject(err));
+        });
     }
+
 };
 
 
 
 function routeRequest(params,res,db,auth){
-
+  
     if(!params.command || !routines[params.command])
         return res.status(400).end();
-
-    routines[params.command](params.args,db,auth)
-    .then((msg)=> res.send(msg))
-    .catch((err)=>res.status(418).end());
+    console.log(params);
+    let args = collectArgs(params);
+    routines[params.command](args,db,auth)
+    .then((msg)=> res.send(`${msg}`))
+    .catch((err)=>{
+        console.error(err);
+        res.status(418).end()
+    });
 
 }
 
@@ -60,7 +112,7 @@ function bindApplication(app,db){
         })
         .then((ready)=>{
             if(ready)
-                routeRequest(req.params,res,db,req.headers.authorization);
+                routeRequest(req.query,res,db,req.headers.authorization);
         })
         .catch((err)=>{
             console.error(err);

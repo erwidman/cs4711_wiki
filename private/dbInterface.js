@@ -121,7 +121,6 @@ function login(username,password){
         let sql = `select password from users where username=?`;
         db.get(sql,[username],(err,arow)=>{
             if(err){
-                commitDB(db);
                 rej(err);
             }
             else{
@@ -138,7 +137,6 @@ function login(username,password){
     .then((success)=>{
     return new Promise((res,rej)=>{
          if(!success){
-            commitDB(db);
             res(false);
         }
         let sql = `update users set lastOnline=? where username=?`;

@@ -94,17 +94,57 @@ describe("Working on dbInterface.js",function(){
 
 });
 
+
+
 const axios = require('axios');
+const querystring = require('querystring');
+
+function createRequest(command,params,auth){
+    let url = `http://localhost:8080/request?command=${command}&${querystring.stringify(params)}`;
+    if(auth){
+        return axios.get(url,{headers:{
+            authorization : auth
+        }});
+    }
+    else
+        return axios.get(url);
+}
 
 describe("Working appBinding.js",function(){
     let server;
     before(function(){
         server = require(`${__dirname}/index.js`);
+        let tmp = db.getDB();
+        tmp.run('delete from users where username=?',['anotherAnon']);
     });
 
     it("-check anon exist",async function(){
         let id = await db.getUserID('anon');
         assert(id>=0,true);
+    });
+
+    it("-createUser",async function(){
+       let response= await new Promise((resolve, reject) => {
+         createRequest('createUser',['anotherAnon'],'somepassword')
+         .then((response)=>{
+            resolve(response);
+         })
+         .catch((err)=>{
+            resolve(false);
+         });
+       });
+       assert(response!==false);
+    });
+
+    it("-login",async function(){
+         let res = await createRequest('login',['anotherAnon'],'somepassword');
+         console.log(res.data);
+         assert(res.data===true);
+    });
+
+    it("-removeUser",async function(){
+        let res = await createRequest('removeUser',['anotherAnon'],"zigzig?~?~?1234");
+       assert(res.data===true);
     });
 
     after(function(){

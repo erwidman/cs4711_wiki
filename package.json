@@ -4,8 +4,8 @@
   "description": "Program for CS4711",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --exit",
-    "testWithLog": "nyc mocha -R spec --exit",
+    "test": "nyc mocha",
+    "testWithLog": "nyc mocha",
     "start": "node index.js 8080",
     "checkin": "bash ./CI/commit.sh $1"
   },

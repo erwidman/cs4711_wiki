@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha",
-    "testWithLog" : "nyc mocha -R spec",
+    "testWithLog": "nyc mocha -R spec",
     "start": "node index.js 8080",
-    "checkin" : "bash ./CI/commit.sh $1"
+    "checkin": "bash ./CI/commit.sh $1"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "chai": "^4.2.0",
     "express": "^4.16.4",
     "mocha": "^5.2.0",
+    "qunit": "^2.7.1",
     "sqlite3": "^4.0.2"
   },
   "devDependencies": {

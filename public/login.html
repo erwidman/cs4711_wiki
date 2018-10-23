@@ -1,0 +1,32 @@
+<head>
+  <link rel="stylesheet" href="login.css">
+</head>
+
+<button class="test-button" onclick="document.getElementById('login').style.display='block'">(open popup)</button>
+
+<div id="login" class="modal">
+
+ <form class="modal-content animate" action="/action_page.php">
+
+    <header>
+		<h1>Log in
+		<span onclick="document.getElementById('login').style.display='none'" class="login-close" title="Close log in">&times;</span>
+		</h1>
+	</header>
+  
+  <div class="login">
+	<label for="uname"><b>Username</b></label>
+	<input type="text" placeholder="Enter Username" name="uname" required>
+
+	<label for="psw"><b>Password</b></label>
+	<input type="password" placeholder="Enter Password" name="psw" required>
+	
+	<input type="checkbox"> Keep me logged in
+	
+	<button type="submit" onclick = "//todo user check">Log in</button>
+	
+	<span type="text"><a href="#">Create new Account</a></span>
+	
+  </div>
+ </form>
+</div>

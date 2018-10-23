@@ -17,7 +17,7 @@ const watcher = require('chokidar').watch([`${__dirname}/private`,`${__dirname}/
 startServer();
 function startServer(){
     app.use(express.static(__dirname+'/public'));
-    let port = process.argv[2] ? process.argv[2] : 8080;
+    let port = Number(process.argv[2]) ? process.argv[2] : 8080;
     server.listen(port,()=>{
         console.log(`~ running on port: ${port}`);
         require(`${__dirname}/private/main.js`).startup(app);
@@ -26,10 +26,13 @@ function startServer(){
 
 function stopServer(){
     server.close();
-    process.exit(0);
+    setTimeout(()=>{
+         process.exit(0);
+     },500);
+   
 }
 
-//a test test
+//a test test`
 
 function rebootProcess(){
     watcher.close();

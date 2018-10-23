@@ -3,7 +3,7 @@ const crypto = require('crypto'),
     algorithm = 'aes-256-ctr',
     password = 'd6F3Efeq';
 const dbFile = `${__dirname}/../data/main.db`;
-//test 3
+
 
 
 //_________________GENERAL USE DB FUNCS
@@ -179,6 +179,14 @@ function getUserID(username){
     
 }
 
+function checkAdmin(username){
+    return new Promise((res,rej)=>getRowSQL('select * from users where username==?',[username],'isAdmin',res,rej));
+}
+
+function makeAdmin(username){
+    return new Promise((res,rej)=>runSQL('update users set isAdmin=1 where username=?',[username],res,rej));
+}
+
 
 function createArticle(owner,title,content){
     let timestamp = getTimestamp();
@@ -233,7 +241,6 @@ function updateArticle(userid,articleid,updatedContent){
         else{
             let sql = 'insert into articleHistory(articleid,userid,updateTime,newContent) values (?,?,?,?)';
             db.run(sql,[articleid,userid,timestamp,updatedContent],(err)=>{
-                console.log(err);
                 if(err){
                     db.exec("ROLLBACK");
                     finalres(err);
@@ -303,10 +310,7 @@ function getArticleHistory(articleid){
 
 //_______________________________
 
-
-
 process.on('exit',closeConnection);
-
 
 module.exports = {
     createUser,
@@ -326,5 +330,7 @@ module.exports = {
     getAllImages,
     getAllArticles,
     getArticle,
-    getArticleHistory
+    getArticleHistory,
+    checkAdmin,
+    makeAdmin
 };

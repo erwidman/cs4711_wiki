@@ -1,6 +1,6 @@
  //check out wiki for more info
  const {should,expect,assert} = require("chai");
-
+ const server = require(`${__dirname}/index.js`);
 
 
 //db interface test
@@ -16,13 +16,11 @@ describe("Working on dbInterface.js",function(){
    
     it("-Testing createUser",async function(){
         let result = await db.createUser("zigzig","1234");
-        console.log("~ userid "+result);
         assert.equal(result>=0,true);
     });
 
     it("-Testing add image",async function(){
         let result = await db.addImage(100,"100x100","20MB","This is it");
-        console.log("~ imageid "+ result);
         assert.equal(result>=0,true);
         let id = result;
         result = await db.getAllImages();
@@ -36,7 +34,6 @@ describe("Working on dbInterface.js",function(){
 
     it("-Testing nonunique username createUser",async function(){
         let result = await db.createUser("zigzig","1234");
-        console.log(result);
         assert.notEqual(result,true);
     });
 
@@ -80,7 +77,6 @@ describe("Working on dbInterface.js",function(){
         let result = await db.lockArticle(artid);
         assert.equal(result,true);
         result = await db.updateArticle(1000,artid,"This is the replaced test");
-        console.log(result);
         assert.equal(result,true);
         result = await db.getAllArticles();
         assert.equal(Array.isArray(result),true);
@@ -111,11 +107,13 @@ function createRequest(command,params,auth){
 }
 
 describe("Working appBinding.js",function(){
-    let server;
     before(function(){
-        server = require(`${__dirname}/index.js`);
+        
         let tmp = db.getDB();
+        db.makeAdmin('zigzig');
         tmp.run('delete from users where username=?',['anotherAnon']);
+        tmp.run('delete from ipBlacklist where 1=1');
+
     });
 
     it("-check anon exist",async function(){
@@ -138,14 +136,70 @@ describe("Working appBinding.js",function(){
 
     it("-login",async function(){
          let res = await createRequest('login',['anotherAnon'],'somepassword');
-         console.log(res.data);
          assert(res.data===true);
     });
 
     it("-removeUser",async function(){
-        let res = await createRequest('removeUser',['anotherAnon'],"zigzig?~?~?1234");
+        let res = await createRequest('removeUser',['anotherAnon'],"zigzig | 1234");
        assert(res.data===true);
     });
+
+
+    it('-addToBlacklist',async function(){
+        let res = await createRequest('addToBlacklist',['255.255.255.255'],"zigzig | 1234");
+        assert(res.data === true);
+    });
+
+    it('-removeFromBlacklist',async function(){
+        let res = await createRequest('removeFromBlacklist',['255.255.255.255'],"zigzig | 1234");
+        assert(res.data ===true);
+    });
+
+    it("-createArticle, lockArticle, updateArticle, getArticle, and getArticleHistory",async function(){
+        let res = await createRequest('createArticle',[1,'rest test','some content'],"");
+        assert(Number(res.data)>0);
+        let id = res.data;
+        res = await createRequest('lockArticle',[id],"zigzig | 1234");
+        assert(res.data===true);
+        res = await createRequest('updateArticle',[22,id,"updated content"],"");
+        assert(res.data===true);
+        res = await createRequest('getArticle',[id],"");
+        expect(res.data).to.have.property('articleid');
+        res = await createRequest('getArticleHistory',[id],"");
+        expect(res.data[0]).to.have.property('articleid');
+
+    });
+
+    it("-getUserid",async function(){
+        let res = await createRequest('getUserID',['zigzig'],'');
+        assert(res.data>0);
+    });
+
+    it("-addImage, getImage",async function(){
+        let res = await createRequest('addImage',[1,'500x1','20mb','a nice pic'],'');
+        assert(res.data>0);
+        let id = res.data;
+        res = await createRequest('getImage',[id],"");
+        expect(res.data).to.have.property('imageid');
+        res = await createRequest('deleteImage',[id],"");
+        assert(res.data===true);
+
+    });
+
+    it("-getAllImages",async function(){
+        let res = await createRequest('getAllImages',[],"");
+        expect(res.data[0]).to.have.property('imageid');
+    });
+
+    it('-getAllArticles',async function(){
+        let res = await createRequest('getAllArticles',[],"");
+        expect(res.data[0]).to.have.property('articleid');
+    });
+
+    
+
+
+
 
     after(function(){
         server.stopServer();

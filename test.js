@@ -188,6 +188,7 @@ describe("Working appBinding.js",function(){
 
     it("-getAllImages",async function(){
         let res = await createRequest('getAllImages',[],"");
+        console.log(res.data);
         expect(res.data[0]).to.have.property('imageid');
     });
 

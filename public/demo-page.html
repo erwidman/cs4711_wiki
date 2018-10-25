@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<head>
+	<style>
+	
+	.logo 
+	{
+		width:200px;
+		height:200px;	
+		display:block;
+		background-image: url(../public/logo.png);
+	}
+	.menu
+	{
+		width: 200px;
+		height: 100vh;
+		background-color: #e2e2e2; 
+		float: left;
+	}
+	
+	.menu-list
+	{
+		display:block;
+		padding: 15px 15px 15px 15px;
+		border-top: 1px solid #a2a9b1;
+		border-bottom: 1px solid #a2a9b1;
+		width:170px;
+		
+	}	
+	.menu-tools
+	{
+		display:block;
+		padding: 15px 15px 15px 15px;
+		border-bottom: 1px solid #a2a9b1;
+		
+		width:170px;
+		
+	}
+	</style>
+</head>
+
+
+
+<div class="menu">
+	
+	<div class="logo" title="hi"> </div>
+	
+	
+	<div class="menu-list" title="hi"> Available Articles<br><br>
+	
+	<a type="text"a href="nope">article 1</a>
+	<a type="text"a href="empty"><br>article 2</a>
+	<a type="text"a href="heylooknothing"><br>article 3</a>
+	<a type="text"a href="errors"><br>article 4</a>
+	<a type="text"a href="mmmhhhm"><br>article 5</a>
+	
+	</div>
+	
+	<div class="menu-tools" title="hi"> Tools<br><br>
+		<link rel="stylesheet" href="login.css">
+		
+		<button class="test-button" onclick="document.getElementById('login').style.display='block'">Log in</button>
+
+		<div id="login" class="modal">
+		<form class="modal-content animate" action="/action_page.php">
+
+			<header>
+				<h1>Log in
+				<span onclick="document.getElementById('login').style.display='none'" class="login-close" title="Close log in">&times;</span>
+				</h1>
+			</header>
+  
+		<div class="login">
+			<label for="uname"><b>Username</b></label>
+			<input type="text" placeholder="Enter Username" name="uname" required>
+			<label for="psw"><b>Password</b></label>
+			<input type="password" placeholder="Enter Password" name="psw" required>
+			<input type="checkbox"> Keep me logged in
+			<button type="submit" onclick = "//todo user check">Log in</button>
+			<span type="text"><a href="#">Create new Account</a></span>
+		</div>
+		</form>
+		</div>
+
+	</div>
+	
+</div>
+
+<head>
+	<style>
+	.title
+	{
+		border-bottom: 1px solid #a2a9b1;
+	}
+	
+	.image 
+	{
+		width:200px;
+		height:200px;	
+		display:block;
+		background-image: url(../public/demo-image.png);
+		float: right;
+		l
+		margin: 50px 50px 50px 50px;
+	}
+	.article
+	{
+		padding-top: 175px;
+		color: eggshell;
+
+	</style>
+</head>
+
+
+
+<div class="article">
+	
+	<h1 id="title" class="title">Sample Article</h1>
+	
+	
+	<div class="image" title="elvis"> </div>
+	
+	
+	<div class="body"> 
+	
+	
+	//todo actual article stuff<br><br>
+	
+	</div>
+	
+	
+
+	</div>
+	
+</div>
+	
+</div>

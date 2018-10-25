@@ -49,8 +49,6 @@ const routines = {
     createUser : function(args,db,auth){
         return new Promise((resolve, reject) => {
             let uname = striptags(args[0]);
-            console.log(typeof args[0]);
-            console.log(typeof auth);
             db.createUser(uname,auth)
             .then((result) => {
                 if(typeof result !== 'object')
@@ -259,7 +257,6 @@ function routeRequest(params,res,db,auth){
     let args = collectArgs(params);
     if(args.length!= numberOfArgs[params.command])
         return res.status(418).send('invalid_args');
-    console.log('in');
     routines[params.command](args,db,auth)
     .then((msg)=> res.send(JSON.stringify(msg)))
     .catch((err)=>{
@@ -271,8 +268,6 @@ function routeRequest(params,res,db,auth){
 
 function bindApplication(app,db){
     app.get('/request',(req,res,next)=>{
-        console.log(req.query);
-        console.log(req.headers);
         db.checkBlacklist(req.ip)
         .then((isOn)=>{
             if(isOn===true){

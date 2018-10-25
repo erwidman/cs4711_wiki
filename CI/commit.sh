@@ -55,7 +55,7 @@ then
     then
         echo "~ no changes to commit";
     else
-        #check if argument was provided for commit message
+        #check if argument was provided for commit message a change
         echo "~ attempting to commit changes";
         if [ "$1" == "" ];
         then

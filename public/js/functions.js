@@ -27,7 +27,7 @@ function createUser(args) {
             alert("error in createUser")
         },
         beforeSend: function (xhr) {
-            xhr.setRequestHeader('password', args.password);
+            xhr.setRequestHeader('authorization', args.password);
         }
     })
 }

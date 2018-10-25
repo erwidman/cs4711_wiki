@@ -49,6 +49,8 @@ const routines = {
     createUser : function(args,db,auth){
         return new Promise((resolve, reject) => {
             let uname = striptags(args[0]);
+            console.log(typeof args[0]);
+            console.log(typeof auth);
             db.createUser(uname,auth)
             .then((result) => {
                 if(typeof result !== 'object')
@@ -57,7 +59,8 @@ const routines = {
                     console.error(result);
                     reject('unable_to_create_user');
                 }
-            });
+            })
+            .catch((err)=>reject(err));
             
 
         });
@@ -132,7 +135,8 @@ const routines = {
                     resolve(row);
                 else
                     reject(row);
-              });
+              })
+              .catch((err)=>reject(err));
         });
     },
     lockArticle : function(args,db,auth){
@@ -159,6 +163,7 @@ const routines = {
             else
                 reject('unable_to_update');
           })
+          .catch((err)=>reject(err));
         });
     },
     getUserID : function(args,db,auth){
@@ -170,6 +175,7 @@ const routines = {
             else 
                 reject('no_such_user');
           })
+          .catch((err)=>reject(err));
         })
     },
     addImage : function(args,db,auth){
@@ -184,6 +190,7 @@ const routines = {
                 else
                     reject('unable_to_create_img');
             })
+            .catch((err)=>reject(err));
         });
     },
     deleteImage : function(args,db,auth){
@@ -194,13 +201,15 @@ const routines = {
                 resolve(true);
             else
                 reject('failed_to_delete');
-         });
+            })
+          .catch((err)=>reject(err));
         });
     },
     getImage : function(args,db,auth){
         return new Promise((resolve, reject) => {
           db.getImage(args[0])
-          .then((result) => resolve(result));
+          .then((result) => resolve(result))
+          .catch((err)=>reject(err));;
         });
     },
     getAllImages : function(args,db,auth){
@@ -250,6 +259,7 @@ function routeRequest(params,res,db,auth){
     let args = collectArgs(params);
     if(args.length!= numberOfArgs[params.command])
         return res.status(418).send('invalid_args');
+    console.log('in');
     routines[params.command](args,db,auth)
     .then((msg)=> res.send(JSON.stringify(msg)))
     .catch((err)=>{
@@ -261,6 +271,8 @@ function routeRequest(params,res,db,auth){
 
 function bindApplication(app,db){
     app.get('/request',(req,res,next)=>{
+        console.log(req.query);
+        console.log(req.headers);
         db.checkBlacklist(req.ip)
         .then((isOn)=>{
             if(isOn===true){
@@ -276,6 +288,7 @@ function bindApplication(app,db){
         })
         .catch((err)=>{
             console.error(err);
+            res.status(418).send(JSON.stringify(err))
         });
     
     });

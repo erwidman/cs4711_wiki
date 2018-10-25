@@ -175,7 +175,7 @@ describe("Working appBinding.js",function(){
         assert(res.data>0);
     });
 
-    it("-addImage, getImage",async function(){
+    it("-addImage, getIm age",async function(){
         let res = await createRequest('addImage',[1,'500x1','20mb','a nice pic'],'');
         assert(res.data>0);
         let id = res.data;

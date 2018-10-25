@@ -21,7 +21,7 @@ function getArticleHandler(){
                 "creadted_by":"Keith Atkinson"
             }
         }
-        $('#main-paragraph').html(example_result.data.content)
+        $('#main').html(example_result.data.content)
     }, function(result) {//reject
         console.error("call failed")
     })

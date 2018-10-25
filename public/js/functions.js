@@ -20,18 +20,14 @@ $('#create-user').on('click', function () {
  */
 function createUser(args) {
     $.ajax({
-        url: '/request',
+        url: '/request?command=createUser&0='+args.username,
         async: true,
-        data: {
-            command: 'createUser',
-            username: args.username
-        },
         success: args.successCallback,
         error: args.failureCallback || function () {
             alert("error in createUser")
         },
         beforeSend: function (xhr) {
-            xhr.setRequestHeader('authorization', args.password);
+            xhr.setRequestHeader('password', args.password);
         }
     })
 }

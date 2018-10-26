@@ -72,3 +72,27 @@ function login(args) {
         }
     })
 }
+
+
+/**
+ *
+ * @param args {object}
+ * @param [args.owner=] - users username, presumably email
+ * @param [args.content] - users password
+ * @param [args.title] - functions used when ajax is successful
+ * @param [args.successCallback] - functions used when ajax is successful
+ * @param [args.failureCallback] - functions used when ajax fails
+ */
+function createArticle(args){
+    $.ajax({
+        url: '/request?command=login&0='+args.username,
+        async: true,
+        success: args.successCallback,
+        error: args.failureCallback || function () {
+            alert("error in CreateUser")
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('authorization', args.password);
+        }
+    })
+}

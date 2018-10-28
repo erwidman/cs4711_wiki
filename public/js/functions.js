@@ -51,6 +51,7 @@ $('#login-user-button').on('click', function () {
 });
 
 
+
 /**
  *
  * @param args {object}
@@ -73,6 +74,14 @@ function login(args) {
     })
 }
 
+$('#create-article-button').on('click', function(){
+    var args = {
+        content: $('#article-content').val(),
+        title: $('#article-title').val()
+    }
+    createArticle(args)
+});
+
 
 /**
  *
@@ -85,11 +94,11 @@ function login(args) {
  */
 function createArticle(args){
     $.ajax({
-        url: '/request?command=login&0='+args.username,
+        url: '/request?command=createArticle&0='+ (args.owner || 'anon')+'&1='+args.title+'&2='+args.content,
         async: true,
         success: args.successCallback,
         error: args.failureCallback || function () {
-            alert("error in CreateUser")
+            alert("error in createArticle")
         },
         beforeSend: function (xhr) {
             xhr.setRequestHeader('authorization', args.password);

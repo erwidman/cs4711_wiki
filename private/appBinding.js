@@ -297,7 +297,7 @@ function bindApplication(app,db){
     const upload = multer({
         dest:`${__dirname}/../public/imgs`
     });
-    app.post('/upload',upload.single('wiki_image'),(req,res,next)=>{
+    app.post('/image',upload.single('wiki_image'),(req,res,next)=>{
       let owner = parseInt(req.body.owner);
       let comment = striptags(req.body.comment);
       let dim = sizeOf(req.file.path);

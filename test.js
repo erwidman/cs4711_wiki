@@ -113,6 +113,7 @@ describe("Working appBinding.js",function(){
         db.makeAdmin('zigzig');
         tmp.run('delete from users where username=?',['anotherAnon']);
         tmp.run('delete from ipBlacklist where 1=1');
+        db.addImage(100,"100x100","20MB","This is it");
 
     });
 

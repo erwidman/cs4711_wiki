@@ -16,7 +16,9 @@
     "chai": "^4.2.0",
     "chokidar": "^2.0.4",
     "express": "^4.16.4",
+    "image-size": "^0.6.3",
     "mocha": "^5.2.0",
+    "multer": "^1.4.1",
     "sqlite3": "^4.0.2",
     "striptags": "^3.1.1"
   },

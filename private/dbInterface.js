@@ -262,7 +262,8 @@ function addImage(owner,dimensions,filesize,comment){
     let timestamp = getTimestamp();
     return new Promise((res,rej)=>runSQL('insert into images(uploadTime,owner,dimensions,filesize,comment) values (?,?,?,?,?)',[getTimestamp(),owner,dimensions,filesize,comment],res,rej))
     .then((result)=>{
-        if(!result)
+        console.log(result.code);
+        if(result !== true)
             return false;
         let db = getDB();
         return new Promise((res,rej)=>{

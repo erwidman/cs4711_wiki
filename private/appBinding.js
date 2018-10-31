@@ -1,4 +1,6 @@
 const striptags = require('striptags');
+const fs = require('fs');
+
 
 
 function collectArgs(params){
@@ -266,6 +268,8 @@ function routeRequest(params,res,db,auth){
 
 }
 
+
+
 function bindApplication(app,db){
     app.get('/request',(req,res,next)=>{
         db.checkBlacklist(req.ip)
@@ -286,6 +290,40 @@ function bindApplication(app,db){
             res.status(418).send(JSON.stringify(err))
         });
     
+    });
+
+    const multer = require('multer');
+    const sizeOf = require('image-size');
+    const upload = multer({
+        dest:`${__dirname}/../public/imgs`
+    });
+    app.post('/upload',upload.single('wiki_image'),(req,res,next)=>{
+      let owner = parseInt(req.body.owner);
+      let comment = striptags(req.body.comment);
+      let dim = sizeOf(req.file.path);
+      if(Number.isNaN(owner))
+        res.status(418).send('invalid_owner');
+      else{
+        
+        db.addImage(owner,`${dim.width}x${dim.height}`,req.file.size,comment)
+        .then((result)=>{
+            if(!Number.isInteger(result))
+                res.status(418).send('storage_failed');
+            else
+                return result;
+                
+        })
+        .then((id)=>{
+            let prefix = `${__dirname}/../public/imgs`
+            fs.rename(`${prefix}/${req.file.filename}`,`${prefix}/${id}.${dim.type}`,(err)=>{
+                if(err)
+                    res.status(418).send(JSON.stringify(err));
+                else
+                    res.send(JSON.stringify({id:id}));
+            });
+        });
+      }
+         
     });
 
 }

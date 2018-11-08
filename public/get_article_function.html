@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--example article http://127.0.0.1:8080/get_article_function.html?articleid=1403-->
+</head>
+<body>
+<h1 id="article-title">
+
+</h1>
+<div id="article-content">
+
+</div>
+<!--id for now-->
+<div id="article-author">
+
+</div>
+<div id="article-last-update">
+
+</div>
+<button id="edit-article">Edit Article</button>
+
+<button id="show-history">show history</button>
+<!--history div is populated with show history function. it puts a <ul><il> here-->
+<div id="history">
+
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="js/functions.js"></script>
+
+<script>
+    $( document ).ready(function() {
+        getArticle({articleid: getParameterByName('articleid')});
+    });
+
+    /**
+     *
+     * @param [args.articleid] - articles id
+     * @param [args.successCallback] - functions used when ajax is successful
+     * @param [args.failureCallback] - functions used when ajax fails
+     */
+    function getArticle(args){
+        $.ajax({
+            url: '/request?command=getArticle&0='+ args.articleid,
+            async: true,
+            dataType: "json",
+            success: function(result){
+                console.log(result);
+                $('#article-title').html(result.title);
+               $('#article-content').html(result.content);
+               $('#article-author').html(result.owner);
+               $('#article-last-update').html(result.lastUpdated);
+
+            },
+            error: args.failureCallback || function () {
+                alert("error in createArticle")
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('authorization', args.password);
+            }
+        })
+    }
+
+    $('#edit-article').on('click', function(){
+        location.href = '/edit_article.html?articleid='+getParameterByName('articleid');
+    });
+
+    $('#show-history').on('click', function(){
+        getHistory({articleid: getParameterByName('articleid')});
+    })
+
+    function getHistory(args){
+        $.ajax({
+            url: '/request?command=getArticleHistory&0='+ args.articleid,
+            async: true,
+            dataType: "json",
+            success: function(result){
+                console.log(result);
+                var html = '<ul>';
+                for(var i = 0; i < result.length; i +=1){
+                   html+= '<li>' + result[i].newContent + '</li>'
+                }
+                html+='</ul>';
+                $('#history').html(html);
+            },
+            error: args.failureCallback || function () {
+                alert("error in createArticle")
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('authorization', args.password);
+            }
+        })
+    }
+
+</script>
+</html>

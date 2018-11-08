@@ -94,7 +94,7 @@ $('#create-article-button').on('click', function(){
  */
 function createArticle(args){
     $.ajax({
-        url: '/request?command=createArticle&0='+ (args.owner || 'anon')+'&1='+args.title+'&2='+args.content,
+        url: '/request?command=createArticle&0='+ (args.owner || 0)+'&1='+args.title+'&2='+args.content,
         async: true,
         success: args.successCallback,
         error: args.failureCallback || function () {
@@ -104,4 +104,50 @@ function createArticle(args){
             xhr.setRequestHeader('authorization', args.password);
         }
     })
+}
+
+
+/**
+ *
+ * @param args {object}
+ * @param [args.owner=] - users username, presumably email
+ * @param [args.content] - users password
+ * @param [args.title] - functions used when ajax is successful
+ * @param [args.successCallback] - functions used when ajax is successful
+ * @param [args.failureCallback] - functions used when ajax fails
+ */
+function addImageToArticle(args){
+    $.ajax({
+        url: '/request?command=addImage&0='+ (args.owner || 0)+'&1='+args.title+'&2='+args.content,
+        async: true,
+        success: args.successCallback,
+        error: args.failureCallback || function () {
+            alert("error in createArticle")
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('authorization', args.password);
+        }
+    })
+}
+
+
+
+$('#get-article-button').on('click', function () {
+    var args = {
+        article: $('#get-article-id').val(),
+        successCallback: function (result) {
+            alert(JSON.stringify(result))
+        }
+    };
+    getArticle(args)
+});
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }

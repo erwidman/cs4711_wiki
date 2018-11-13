@@ -1,0 +1,40 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>QUnit basic example</title>
+    <link rel="stylesheet" href="css/qunit.css">
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture-main"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/qunit.js"></script>
+<script>
+    QUnit.config.autostart = false;
+    window.onload = function() {
+        $.ajax({
+            url: '/article.html',
+            dataType: 'html',
+            success: function (html) {
+                // find specific elements you want...
+                console.log($(html))
+                var elem = $(html).find('#main').parent();
+                console.log(elem)
+                $('#qunit-fixture-main').append(elem.html());
+                QUnit.start();
+            }
+        });
+    }
+    QUnit.test( "hello test", function( assert ) {
+        $.getScript( "js/article.js" )
+            .done(function( script, textStatus ) {
+
+            })
+            .fail(function( jqxhr, settings, exception ) {
+
+            });
+        assert.ok( 1 == "1", "Passed!" );
+    });
+</script>
+</body>
+</html>

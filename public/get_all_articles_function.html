@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--example article http://127.0.0.1:8080/get_article_function.html?articleid=1403-->
+</head>
+<body>
+
+<ul id="article-list" class="collection">
+
+</ul>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="js/functions.js"></script>
+
+<script>
+    $( document ).ready(function() {
+        getAllArticles({articleid: getParameterByName('articleid')});
+    });
+
+    function getAllArticles(args){
+        $.ajax({
+            url: '/request?command=getAllArticles',
+            async: true,
+            dataType: "json",
+            success: function(result){
+                var html = '';
+             for(var i = 0; i < result.length; i +=1){
+                    //TODO add css to li and a element
+                    html += '<li class="collection-item"> <a href="/get_article_function.html?articleid='+result[i].articleid+'" >'+ result[i].title +'</a> </li>'
+                }
+                $('#article-list').html(html);
+
+
+            },
+            error: args.failureCallback || function () {
+                alert("error in createArticle")
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('authorization', args.password);
+            }
+        })
+    }
+
+
+
+</script>
+</html>

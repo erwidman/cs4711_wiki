@@ -161,7 +161,7 @@ function addToBlacklist(ip){
 }
 
 function checkBlacklist(ip){
-    return new Promise((res,rej)=>checkExistSQL('select * from ipBlacklist where ip=?',[ip],'ipaddr',res,rej));
+    return new Promise((res,rej)=>checkExistSQL('select * from ipBlacklist where ipaddr=?',[ip],'ipaddr',res,rej));
 }
 
 function getUserID(username){

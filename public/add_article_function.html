@@ -64,12 +64,26 @@
      */
     function createArticle(args){
         $.ajax({
-            url: '/request?command=createArticle&0='+ (args.owner || 0)+'&1='+args.title+'&2='+args.content,
+            type : "POST",
+            url: '/request',
+            data : JSON.stringify({
+                "command" : "createArticle",
+                0 :  args.owner || 0,
+                1 : args.title,
+                2 : args.content
+            }),
+            dataType : 'json',
             async: true,
+            contentType : "application/json",
             success: function(result){
-                location.href = '/get_article_function.html?articleid='+result;
+            
+                if(result){
+                    location.href = '/get_article_function.html?articleid='+result;
+
+                }
             },
-            error: args.failureCallback || function () {
+            error: args.failureCallback || function (err,b,c) {
+                alert(c);
                 alert("error in createArticle")
             },
             beforeSend: function (xhr) {

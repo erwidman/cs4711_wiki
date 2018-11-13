@@ -89,16 +89,27 @@
      *
      */
     function updateArticle(args){
+        console.log(args.content)
         $.ajax({
-            url: '/request?command=updateArticle&0='+ (args.owner || 0)+'&1='+args.articleid+'&2='+args.content,
+            type : "POST",
+            url: '/request',
+            data : JSON.stringify({
+                "command" : "updateArticle",
+                0 :  args.owner || 0,
+                1 : args.articleid,
+                2 : args.content
+            }),
+            dataType : 'json',
             async: true,
+            contentType : "application/json",
             success: function(result){
                 if(result){
                     location.href = '/get_article_function.html?articleid='+args.articleid;
 
                 }
             },
-            error: args.failureCallback || function () {
+            error: args.failureCallback || function (err,b,c) {
+                alert(c);
                 alert("error in createArticle")
             },
             beforeSend: function (xhr) {

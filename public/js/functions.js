@@ -43,7 +43,20 @@ $('#login-user-button').on('click', function () {
         username: $('#login-user-email').val(),
         password: $('#login-user-password').val(),
         successCallback: function () {
-            alert("success! created user")
+            localStorage.setItem("password", $('#login-user-password').val());
+            localStorage.setItem("email", $('#login-user-email').val())
+            alert("success! Logged in!")
+            $.ajax({
+                url: '/request?command=getUserID&0='+args.username,
+                async: true,
+                success:function(result){localStorage.setItem("id", result)},
+                error: args.failureCallback || function () {
+                    alert("error in createUser")
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('authorization', args.password);
+                }
+            })
         }
     };
     console.log('login user: ', args);

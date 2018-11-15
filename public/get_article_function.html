@@ -7,6 +7,25 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 <!--example article http://127.0.0.1:8080/get_article_function.html?articleid=1403-->
+    <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Wiki team 2</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="/get_all_articles_function.html">Articles</a></li>
+            </ul>
+
+            <!-- ADDED LOGIN BUTTON -->
+            <ul class="right hide-on-med-and-down">
+                <li class = "includedContent" id="includedContent"></li>
+            </ul>
+
+            <ul id="nav-mobile" class="sidenav">
+                <li><a href="#">Navbar Link</a></li>
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+
+    </nav>
+
 </head>
 <body>
 <div class="row">
@@ -34,7 +53,9 @@
 <button id="show-history" class="btn-large col s3 offset-s1">Show History</button>
 
 </div><!--history div is populated with show history function. it puts a <ul><il> here-->
-<div id="history">
+<div class="row">
+<div id="history" class="col s11 offset-s1">
+</div>
 
 </div>
 </body>
@@ -62,8 +83,8 @@
                 console.log(result);
                 $('#article-title').html(result.title);
                $('#article-content').html(result.content);
-               $('#article-author').html(result.owner);
-               $('#article-last-update').html(result.lastUpdated);
+               $('#article-author').html("Author ID: " + result.owner);
+               $('#article-last-update').html("Last Updated: " + result.lastUpdated);
 
             },
             error: args.failureCallback || function () {
@@ -92,7 +113,7 @@
                 console.log(result);
                 var html = '<ul>';
                 for(var i = 0; i < result.length; i +=1){
-                   html+= '<li>' + result[i].newContent + '</li>'
+                   html+= '<li>' + result[i].newContent + '<br> By UserID' + result[i].userid+ '<br> Time:'+ result[i].updateTime+ '</li>'
                 }
                 html+='</ul>';
                 $('#history').html(html);

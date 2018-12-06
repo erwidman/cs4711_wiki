@@ -51,6 +51,7 @@
 <button id="edit-article" class="btn-large col s3 offset-s1">Edit Article</button>
 
 <button id="show-history" class="btn-large col s3 offset-s1">Show History</button>
+    <button id="lock-article" class="btn-large col s3 offset-s1 disabled">lock Article</button>
 
 </div><!--history div is populated with show history function. it puts a <ul><il> here-->
 <div class="row">
@@ -66,6 +67,9 @@
 <script>
     $( document ).ready(function() {
         getArticle({articleid: getParameterByName('articleid')});
+        if(localStorage.getItem('admin') == "true"){
+            $('#lock-article').removeClass('disabled')
+        }
     });
 
     /**

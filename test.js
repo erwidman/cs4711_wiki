@@ -167,6 +167,7 @@ describe("Working appBinding.js",function(){
         res = await createRequest('getArticle',[id],"");
         expect(res.data).to.have.property('articleid');
         res = await createRequest('getArticleHistory',[id],"");
+        console.log(res.data);
         expect(res.data[0]).to.have.property('articleid');
 
     });
@@ -198,8 +199,6 @@ describe("Working appBinding.js",function(){
     });
 
     
-
-
 
 
     after(function(){

@@ -300,11 +300,11 @@ function getAllArticles(){
 }
 
 function getArticle(articleid){
-    return new Promise((res,rej)=> getRowSQL('select * from articles where articleid=?',[articleid],'articleid',res,rej));
+    return new Promise((res,rej)=> getRowSQL('select * from articles NATURAL JOIN users where articleid=?',[articleid],'articleid',res,rej));
 }
 
 function getArticleHistory(articleid){
-    return new Promise((res,rej)=>getAllSQL('select * from articleHistory where articleid=?',[articleid],res,rej));
+    return new Promise((res,rej)=>getAllSQL('select * from articleHistory NATURAL JOIN users where articleid=?',[articleid],res,rej));
 }
 
 

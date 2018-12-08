@@ -19,6 +19,7 @@ function verifyAuth(auth,db){
 
     let user;
     let pass;
+    console.log(auth);
     return new Promise((resolve, reject) => {
         if(!auth)
             reject('invalid_auth');

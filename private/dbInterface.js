@@ -167,7 +167,7 @@ function checkBlacklist(ip){
 function getUserID(username){
     let db = getDB();
     return new Promise((res,rej)=>{
-        db.get('select userid from users where username=?',[username],(err,row)=>{
+        db.get('select userid, isAdmin from users where username=?',[username],(err,row)=>{
             if(err){
                 console.error(err);
                 res(false);

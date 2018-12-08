@@ -173,7 +173,7 @@ function getUserID(username){
                 res(false);
             }
             else
-                res(row.userid);
+                res(row);
         });
     });
     

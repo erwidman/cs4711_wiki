@@ -39,7 +39,8 @@ describe("Working on dbInterface.js",function(){
 
     it("-Testing getUserId",async function(){
         let result = await db.getUserID("zigzig");
-        assert.equal(result>0,true);
+        console.log(result);
+        expect(result).to.have.property('userid')
     });
 
     it("-Testing login functions",async function(){
@@ -119,7 +120,7 @@ describe("Working appBinding.js",function(){
 
     it("-check anon exist",async function(){
         let id = await db.getUserID('anon');
-        assert(id>=0,true);
+        expect(id).to.have.property('userid')
     });
 
     it("-createUser",async function(){
@@ -173,8 +174,9 @@ describe("Working appBinding.js",function(){
     });
 
     it("-getUserid",async function(){
-        let res = await createRequest('getUserID',['zigzig'],'');
-        assert(res.data>0);
+        let res = await createRequest('getUserID',['zigzig'],'zigzig | 1234');
+        console.log(res.data);
+        expect(res.data).to.have.property('userid');
     });
 
     it("-addImage, getIm age",async function(){

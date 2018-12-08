@@ -171,7 +171,8 @@ const routines = {
         return new Promise((resolve, reject) => {
           db.getUserID(args[0])
           .then((result)=>{
-            if(result>0)
+            console.log(result)
+            if(result)
                 resolve(result);
             else 
                 reject('no_such_user');

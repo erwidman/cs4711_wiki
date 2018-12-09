@@ -68,10 +68,23 @@
 <script>
     $( document ).ready(function() {
         getArticle({articleid: getParameterByName('articleid')});
-        if(localStorage.getItem('admin') == "true"){
-            $('#lock-article').removeClass('disabled')
-        }
+
     });
+
+    $('#lock-article').on('click', function(){
+            $.ajax({
+                url: '/request?command=lockArticle&0='+getParameterByName('articleid'),
+                async: true,
+                success:function(){location.reload()},
+                error: function () {
+                    alert("error in Authentication")
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('authorization',localStorage.getItem('email') + ' | ' + localStorage.getItem('password') );
+                }
+            })
+        }
+    );
 
     /**
      *
@@ -90,7 +103,13 @@
                $('#article-content').html(result.content);
                $('#article-author').html("Author Username: " + result.username);
                $('#article-last-update').html("Last Updated: " + result.lastUpdated);
-
+                if(result.isEditable == 0){
+                    $('#edit-article').addClass('disabled');
+                    $('#lock-article').hide();
+                }
+                if(localStorage.getItem('isAdmin') == 1){
+                    $('#lock-article').removeClass('disabled')
+                }
             },
             error: args.failureCallback || function () {
                 alert("error in createArticle")
@@ -107,7 +126,7 @@
 
     $('#show-history').on('click', function(){
         getHistory({articleid: getParameterByName('articleid')});
-    })
+    });
 
     function getHistory(args){
         $.ajax({

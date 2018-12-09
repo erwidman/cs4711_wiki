@@ -12,6 +12,7 @@
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Wiki team 2</a>
         <ul class="right hide-on-med-and-down">
             <li><a href="./get_all_articles_function.html">Articles</a></li>
+            <li><a style="display:none;" class="admin-link" href="./ban_user.html">Admin</a></li>
         </ul>
 
 		<ul class="right hide-on-med-and-down">
@@ -42,6 +43,9 @@
     (function($){
         $(function(){
            $('#includedContent').load("./login_create.html");
+           if(localStorage.getItem('isAdmin') == 1){
+               $('.admin-link').show();
+           }
         }); // end of document ready
     })(jQuery); // end of jQuery name space
 </script>

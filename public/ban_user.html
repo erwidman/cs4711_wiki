@@ -76,7 +76,7 @@
                 alert("error in Authentication")
             },
             beforeSend: function (xhr) {
-                xhr.setRequestHeader('authorization', localStorage.getItem('email'), localStorage.getItem('password'));
+                xhr.setRequestHeader('authorization',localStorage.getItem('email') + ' | ' + localStorage.getItem('password') );
             }
         })
         }
@@ -91,7 +91,7 @@
                     alert("error in Authentication")
                 },
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader('authorization', localStorage.getItem('email'), localStorage.getItem('password'));
+                    xhr.setRequestHeader('authorization', localStorage.getItem('email') + ' | ' + localStorage.getItem('password') );
                 }
             })
         }
@@ -106,7 +106,7 @@
                     alert("error in Authentication")
                 },
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader('authorization', localStorage.getItem('email'), localStorage.getItem('password'));
+                    xhr.setRequestHeader('authorization', localStorage.getItem('email') + ' | ' + localStorage.getItem('password') );
                 }
             })
         }

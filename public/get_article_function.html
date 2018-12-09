@@ -7,24 +7,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 <!--example article http://127.0.0.1:8080/get_article_function.html?articleid=1403-->
-    <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Wiki team 2</a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="/get_all_articles_function.html">Articles</a></li>
-            </ul>
-
-            <!-- ADDED LOGIN BUTTON -->
-            <ul class="right hide-on-med-and-down">
-                <li class = "includedContent" id="includedContent"></li>
-            </ul>
-
-            <ul id="nav-mobile" class="sidenav">
-                <li><a href="#">Navbar Link</a></li>
-            </ul>
-            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        </div>
-
-    </nav>
 <style>
     .user-image {
         width:100%;
@@ -32,6 +14,10 @@
 </style>
 </head>
 <body>
+
+<!-- LOAD HEADER -->
+<div class = "head" id="head"></div>
+
 <div class="row">
 
 <h1 id="article-title" class="col s4 offset-s1">
@@ -67,6 +53,10 @@
 </div>
 
 </div>
+
+<!-- LOAD FOOTER -->
+<div class = "foot" id="foot"></div>
+
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -140,4 +130,21 @@
     }
 
 </script>
+<!-- LOAD HEADER & FOOTER -->
+<script>
+    (function($){
+        $(function(){
+           $('#head').load("./header.html");
+        });
+    })(jQuery);
+</script>
+
+<script>
+    (function($){
+        $(function(){
+           $('#foot').load("./footer.html");
+        });
+    })(jQuery);
+</script>
+
 </html>

@@ -8,24 +8,9 @@
     <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-<header>
-    <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Wiki team 2</a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="/get_all_articles_function.html">Articles</a></li>
-            </ul>
-            <!-- ADDED LOGIN BUTTON -->
-            <ul class="right hide-on-med-and-down">
-                <li class="includedContent" id="includedContent"></li>
-            </ul>
-            <ul id="nav-mobile" class="sidenav">
-                <li><a href="#">Navbar Link</a></li>
-            </ul>
-            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        </div>
 
-    </nav>
-</header>
+<!-- LOAD HEADER -->
+<div class = "head" id="head"></div>
 
 <div class="container">
     <div class="row center">
@@ -64,6 +49,10 @@
         </div>
     </div>
 </div>
+
+<!-- LOAD FOOTER -->
+<div class = "foot" id="foot"></div>
+
 
 <!-- Previous
 <label for="article-title">Article Title</label>
@@ -204,4 +193,22 @@
     }
 
 </script>
+
+<!-- LOAD HEADER & FOOTER -->
+<script>
+    (function($){
+        $(function(){
+           $('#head').load("./header.html");
+        });
+    })(jQuery);
+</script>
+
+<script>
+    (function($){
+        $(function(){
+           $('#foot').load("./footer.html");
+        });
+    })(jQuery);
+</script>
+
 </html>

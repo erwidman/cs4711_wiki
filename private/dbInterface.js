@@ -124,7 +124,10 @@ function login(username,password){
                 rej(err);
             }
             else{
-                res(arow.password);
+                if(arow.password)
+                    res(arow.password);
+                else 
+                    rej('no_such_user');
             }
            
         });
@@ -304,7 +307,7 @@ function getArticle(articleid){
 }
 
 function getArticleHistory(articleid){
-    return new Promise((res,rej)=>getAllSQL('select * from articleHistory left JOIN users on articleHistory.userid=users.userid where articleid=?',[articleid],res,rej));
+    return new Promise((res,rej)=>getAllSQL('select articleid, articleHistory.userid, updateTime, newContent, username, lastOnline, isAdmin from articleHistory left JOIN users on articleHistory.userid=users.userid where articleid=?',[articleid],res,rej));
 }
 
 

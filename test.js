@@ -71,13 +71,13 @@ describe("Working on dbInterface.js",function(){
     });
 
     it("-Testing create article, lock article, and update article",async function(){
-        db.createArticle(200,"Another article","sl");
+        db.createArticle(782,"Another article","sl");
         db.createArticle(2034,"Still article","sl");
         let artid = await db.createArticle(44,"Test Article","This is a test. This is a test");
         assert.equal(artid>0,true);
         let result = await db.lockArticle(artid);
         assert.equal(result,true);
-        result = await db.updateArticle(1000,artid,"This is the replaced test");
+        result = await db.updateArticle(780,artid,"This is the replaced test");
         assert.equal(result,true);
         result = await db.getAllArticles();
         assert.equal(Array.isArray(result),true);

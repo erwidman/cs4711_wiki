@@ -291,7 +291,7 @@ function deleteImage(imageid){
 //_______________________________GETTERS
 
 function getImage(imageid){
-    return new Promise((res,rej)=>getRowSQL('select * from images where imageid=?',[imageid],'imageid',res,rej));
+    return new Promise((res,rej)=>getRowSQL('select * from images left join users on images.owner=users.userid where imageid=?',[imageid],'imageid',res,rej));
 }
 
 function getAllImages(){

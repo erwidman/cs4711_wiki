@@ -137,7 +137,7 @@
                 console.log(result);
                 var html = '<ul>';
                 for(var i = 0; i < result.length; i +=1){
-                   html+= '<li>' + result[i].newContent + '<br> By UserID' + result[i].userid+ '<br> Time:'+ result[i].updateTime+ '</li>'
+                   html+= '<li>' + result[i].newContent + '<br> By Username: ' + ( result[i].username == null ? 'anon' : result[i].username ) + '<br> Time:'+ result[i].updateTime+ '</li>'
                 }
                 html+='</ul>';
                 $('#history').html(html);

@@ -13,7 +13,7 @@
 <form class="col s12">
 <div class="row">	
 		
-	<div class="row center">
+	<div>
        <a class=" modal-trigger" href="#login">Log in</a>
 		
    </div>
@@ -79,6 +79,13 @@
 <!--
 	Added some new files for creating the modal, may remove later
  -->
+ 
+ <script type="text/javascript">
+    $(document).ready(function(){
+        $("#login").modal('show');
+    });
+</script>
+ 
 <script src="./testing/jquery-3.2.1.min.js"></script>
 <script src="./testing/materialize.js"></script>
 <script src="./testing/init.js"></script>

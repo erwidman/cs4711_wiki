@@ -168,6 +168,7 @@ Previous version
         updateArticle({
             articleid: getParameterByName('articleid'),
             content:'<div class="col s9">'+quill.container.firstChild.innerHTML+'</div><div class="user-image-div">'+images_html+'</div>',
+            userid: (localStorage.getItem('id') || 0)
         })
     });
     /**
@@ -176,14 +177,9 @@ Previous version
     function updateArticle(args){
         console.log(args.content)
         $.ajax({
-            type : "POST",
-            url: '/request',
-            data : JSON.stringify({
-                "command" : "updateArticle",
-                0 :  args.owner || 0,
-                1 : args.articleid,
-                2 : args.content
-            }),
+            type : "GET",
+            url: '/request?command=updateArticle&0='+args.userid+ '&1='+args.articleid +'&2='+args.content,
+
             dataType : 'json',
             async: true,
             contentType : "application/json",

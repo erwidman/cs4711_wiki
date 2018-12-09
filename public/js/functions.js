@@ -89,37 +89,6 @@ function login(args) {
     })
 }
 
-$('#create-article-button').on('click', function () {
-    var args = {
-        content: $('#article-content').val(),
-        title: $('#article-title').val()
-    }
-    createArticle(args)
-});
-
-
-/**
- *
- * @param args {object}
- * @param [args.owner=] - users username, presumably email
- * @param [args.content] - users password
- * @param [args.title] - functions used when ajax is successful
- * @param [args.successCallback] - functions used when ajax is successful
- * @param [args.failureCallback] - functions used when ajax fails
- */
-function createArticle(args) {
-    $.ajax({
-        url: '/request?command=createArticle&0=' + (args.owner || 0) + '&1=' + args.title + '&2=' + args.content,
-        async: true,
-        success: args.successCallback,
-        error: args.failureCallback || function () {
-            alert("error in createArticle")
-        },
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('authorization', args.password);
-        }
-    })
-}
 
 
 /**

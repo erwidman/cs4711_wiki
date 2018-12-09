@@ -12,20 +12,19 @@
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Wiki team 2</a>
         <ul class="right hide-on-med-and-down">
             <li><a href="./get_all_articles_function.html">Articles</a></li>
-            <li><a class="admin-link" style="display:none;" href="./ban_user.html">Admin</a></li>
         </ul>
-		
+
 		<ul class="right hide-on-med-and-down">
         <li><a href="./functions.html">DEMO Functions</a></li>
-		
+
 		<!-- ADDED LOGIN BUTTON -->
 		 <ul class="right hide-on-med-and-down">
 			<li class = "includedContent" id="includedContent"></li>
 			 <li><a href="./login_create.html#login">DEMO Login</a></li>
 		</ul>
-		
-		
-		
+
+
+
         <ul id="nav-mobile" class="sidenav">
             <li><a href="#">Navbar Link</a></li>
         </ul>
@@ -36,17 +35,13 @@
 <!--  Scripts-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/materialize.min.js"></script>
-		
-<!-- ADDED LOGIN BUTTON -->	
+
+<!-- ADDED LOGIN BUTTON -->
 <script>
     //default init from template
     (function($){
         $(function(){
            $('#includedContent').load("./login_create.html");
-           if(localStorage.getItem('isAdmin') == 1){
-               $('.admin-link').show();
-
-           }
         }); // end of document ready
     })(jQuery); // end of jQuery name space
 </script>

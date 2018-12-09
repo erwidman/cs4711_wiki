@@ -19,13 +19,13 @@ $('#create-user-button').on('click', function () {//when an element with id="cre
  * @callback [args.failureCallback] - functions used when ajax fails
  */
 function createUser(args) {
-    if(!args.username || !args.password){
+    if (!args.username || !args.password) {
         args.failureCallback || function () {
             alert("error in createUser" + JSON.stringify(args))
         }()
     }
     $.ajax({
-        url: '/request?command=createUser&0='+args.username,
+        url: '/request?command=createUser&0=' + args.username,
         async: true,
         success: args.successCallback,
         error: args.failureCallback || function () {
@@ -47,9 +47,12 @@ $('#login-user-button').on('click', function () {
             localStorage.setItem("email", $('#login-user-email').val())
             alert("success! Logged in!")
             $.ajax({
-                url: '/request?command=getUserID&0='+args.username,
+                url: '/request?command=getUserID&0=' + args.username,
                 async: true,
-                success:function(result){localStorage.setItem("id", result)},
+                success: function (result) {
+                    localStorage.setItem("id", JSON.parse(result).userid);
+                    localStorage.setItem("isAdmin", JSON.parse(result).isAdmin);
+                },
                 error: args.failureCallback || function () {
                     alert("error in createUser")
                 },
@@ -64,7 +67,6 @@ $('#login-user-button').on('click', function () {
 });
 
 
-
 /**
  *
  * @param args {object}
@@ -75,7 +77,7 @@ $('#login-user-button').on('click', function () {
  */
 function login(args) {
     $.ajax({
-        url: '/request?command=login&0='+args.username,
+        url: '/request?command=login&0=' + args.username,
         async: true,
         success: args.successCallback,
         error: args.failureCallback || function () {
@@ -87,7 +89,7 @@ function login(args) {
     })
 }
 
-$('#create-article-button').on('click', function(){
+$('#create-article-button').on('click', function () {
     var args = {
         content: $('#article-content').val(),
         title: $('#article-title').val()
@@ -105,9 +107,9 @@ $('#create-article-button').on('click', function(){
  * @param [args.successCallback] - functions used when ajax is successful
  * @param [args.failureCallback] - functions used when ajax fails
  */
-function createArticle(args){
+function createArticle(args) {
     $.ajax({
-        url: '/request?command=createArticle&0='+ (args.owner || 0)+'&1='+args.title+'&2='+args.content,
+        url: '/request?command=createArticle&0=' + (args.owner || 0) + '&1=' + args.title + '&2=' + args.content,
         async: true,
         success: args.successCallback,
         error: args.failureCallback || function () {
@@ -129,9 +131,9 @@ function createArticle(args){
  * @param [args.successCallback] - functions used when ajax is successful
  * @param [args.failureCallback] - functions used when ajax fails
  */
-function addImageToArticle(args){
+function addImageToArticle(args) {
     $.ajax({
-        url: '/request?command=addImage&0='+ (args.owner || 0)+'&1='+args.title+'&2='+args.content,
+        url: '/request?command=addImage&0=' + (args.owner || 0) + '&1=' + args.title + '&2=' + args.content,
         async: true,
         success: args.successCallback,
         error: args.failureCallback || function () {
@@ -142,7 +144,6 @@ function addImageToArticle(args){
         }
     })
 }
-
 
 
 $('#get-article-button').on('click', function () {

@@ -12,6 +12,9 @@
 <!-- LOAD HEADER -->
 <div class = "head" id="head"></div>
 
+
+
+
 <div class="container">
     <div class="row center">
         <br>
@@ -112,7 +115,7 @@
             data.append('comment',  $($(imgForm).find('textarea')[0]).val());
             data.append('owner',  (localStorage.getItem('id')? localStorage.getItem('id') : 0 )  );
 
-
+            console.log(data, (localStorage.getItem('id')? localStorage.getItem('id') : 0 ) )
             $.ajax({
                 mimeType: 'multipart/form-data',
                 url: '/image',

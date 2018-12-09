@@ -6,59 +6,71 @@
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-<!--example article http://127.0.0.1:8080/get_article_function.html?articleid=1403-->
-<style>
-    .user-image {
-        width:100%;
-    }
-</style>
+    <!--example article http://127.0.0.1:8080/get_article_function.html?articleid=1403-->
+    <style>
+        .user-image {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
 <!-- LOAD HEADER -->
-<div class = "head" id="head"></div>
+<div class="head" id="head"></div>
 
 <div class="row">
 
-<h1 id="article-title" class="col s4 offset-s1">
-</h1>
+    <div id="modal-image" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>Image Info:</h4>
+            <p>Dimensions: <span class="img-dimensions"></span></p>
+            <p>Uploaded: <span class="img-uploaded"></span></p>
+            <p>Uploaded By: <span class="img-uploaded-by"></span></p>
+            <p>Comment: <span class="img-comment"></span></p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
+    <h1 id="article-title" class="col s4 offset-s1">
+    </h1>
 
 </div>
 <div class="row">
 
-<div class="col s11 offset-s1">
-    <div class="col s9" id="article-content">
+    <div class="col s11 offset-s1">
+        <div class="col s9" id="article-content">
 
-    </div>
-    <div class="col s3" id="images">
+        </div>
+        <div class="col s3" id="images">
 
+        </div>
     </div>
-</div>
 </div>
 <!--id for now-->
 <div class="row">
 
-<div id="article-author" class="col s11 offset-s1">
-</div>
-<div id="article-last-update" class="col s11 offset-s1">
-</div>
+    <div id="article-author" class="col s11 offset-s1">
+    </div>
+    <div id="article-last-update" class="col s11 offset-s1">
+    </div>
 </div>
 <div class="row">
 
-<button id="edit-article" class="btn-large col s3 offset-s1">Edit Article</button>
+    <button id="edit-article" class="btn-large col s3 offset-s1">Edit Article</button>
 
-<button id="show-history" class="btn-large col s3 offset-s1">Show History</button>
+    <button id="show-history" class="btn-large col s3 offset-s1">Show History</button>
     <button id="lock-article" class="btn-large col s3 offset-s1 disabled">lock Article</button>
 
 </div><!--history div is populated with show history function. it puts a <ul><il> here-->
 <div class="row">
-<div id="history" class="col s11 offset-s1">
-</div>
+    <div id="history" class="col s11 offset-s1">
+    </div>
 
 </div>
 
 <!-- LOAD FOOTER -->
-<div class = "foot" id="foot"></div>
+<div class="foot" id="foot"></div>
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -66,21 +78,23 @@
 <script src="js/functions.js"></script>
 <script src="js/materialize.min.js"></script>
 <script>
-    $( document ).ready(function() {
+    $(document).ready(function () {
         getArticle({articleid: getParameterByName('articleid')});
 
     });
 
-    $('#lock-article').on('click', function(){
+    $('#lock-article').on('click', function () {
             $.ajax({
-                url: '/request?command=lockArticle&0='+getParameterByName('articleid'),
+                url: '/request?command=lockArticle&0=' + getParameterByName('articleid'),
                 async: true,
-                success:function(){location.reload()},
+                success: function () {
+                    location.reload()
+                },
                 error: function () {
                     alert("error in Authentication")
                 },
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader('authorization',localStorage.getItem('email') + ' | ' + localStorage.getItem('password') );
+                    xhr.setRequestHeader('authorization', localStorage.getItem('email') + ' | ' + localStorage.getItem('password'));
                 }
             })
         }
@@ -92,24 +106,39 @@
      * @param [args.successCallback] - functions used when ajax is successful
      * @param [args.failureCallback] - functions used when ajax fails
      */
-    function getArticle(args){
+    function getArticle(args) {
         $.ajax({
-            url: '/request?command=getArticle&0='+ args.articleid,
+            url: '/request?command=getArticle&0=' + args.articleid,
             async: true,
             dataType: "json",
-            success: function(result){
+            success: function (result) {
                 console.log(result);
                 $('#article-title').html(result.title);
-               $('#article-content').html(result.content);
-               $('#article-author').html("Author Username: " + result.username);
-               $('#article-last-update').html("Last Updated: " + result.lastUpdated);
-                if(result.isEditable == 0){
+                $('#article-content').html(result.content);
+                $('#article-author').html("Author Username: " + result.username);
+                $('#article-last-update').html("Last Updated: " + result.lastUpdated);
+                if (result.isEditable == 0) {
                     $('#edit-article').addClass('disabled');
                     $('#lock-article').hide();
                 }
-                if(localStorage.getItem('isAdmin') == 1){
+                if (localStorage.getItem('isAdmin') == 1) {
                     $('#lock-article').removeClass('disabled')
                 }
+                $('.user-image').on('click', function () {
+                    $.ajax({
+                        url: '/request?command=getImage&0=' + this.dataset.id,
+                        processData: false,
+                        contentType: false,
+                        type: 'GET',
+                        success: function (data) {
+                            $('.img-dimensions').html(JSON.parse(data).dimensions);
+                            $('.img-uploaded').html(JSON.parse(data).uploadTime);
+                            $('.img-uploaded-by').html(JSON.parse(data).username);
+                            $('.img-comment').html(JSON.parse(data).comment);
+                            image_instance[0].open();
+                        }
+                    })
+                })
             },
             error: args.failureCallback || function () {
                 alert("error in createArticle")
@@ -120,27 +149,42 @@
         })
     }
 
-    $('#edit-article').on('click', function(){
-        location.href = '/edit_article.html?articleid='+getParameterByName('articleid');
+    $('#edit-article').on('click', function () {
+        location.href = '/edit_article.html?articleid=' + getParameterByName('articleid');
     });
 
-    $('#show-history').on('click', function(){
+    $('#show-history').on('click', function () {
         getHistory({articleid: getParameterByName('articleid')});
     });
 
-    function getHistory(args){
+    function getHistory(args) {
         $.ajax({
-            url: '/request?command=getArticleHistory&0='+ args.articleid,
+            url: '/request?command=getArticleHistory&0=' + args.articleid,
             async: true,
             dataType: "json",
-            success: function(result){
+            success: function (result) {
                 console.log(result);
                 var html = '<ul>';
-                for(var i = 0; i < result.length; i +=1){
-                   html+= '<li>' + result[i].newContent + '<br> By Username: ' + ( result[i].username == null ? 'anon' : result[i].username ) + '<br> Time:'+ result[i].updateTime+ '</li>'
+                for (var i = 0; i < result.length; i += 1) {
+                    html += '<li>' + result[i].newContent + '<br> By Username: ' + (result[i].username == null ? 'anon' : result[i].username) + '<br> Time:' + result[i].updateTime + '</li>'
                 }
-                html+='</ul>';
+                html += '</ul>';
                 $('#history').html(html);
+                $('.user-image').on('click', function () {
+                    $.ajax({
+                        url: '/request?command=getImage&0=' + this.dataset.id,
+                        processData: false,
+                        contentType: false,
+                        type: 'GET',
+                        success: function (data) {
+                            $('.img-dimensions').html(JSON.parse(data).dimensions);
+                            $('.img-uploaded').html(JSON.parse(data).uploadTime);
+                            $('.img-uploaded-by').html(JSON.parse(data).username);
+                            $('.img-comment').html(JSON.parse(data).comment);
+                            image_instance[0].open();
+                        }
+                    })
+                })
             },
             error: args.failureCallback || function () {
                 alert("error in createArticle")
@@ -150,21 +194,28 @@
             }
         })
     }
+
+    var elems = document.querySelectorAll('#modal-image');
+    var image_instance = M.Modal.init(elems, {});
+    $('.modal-close').on('click', function () {
+        image_instance[0].close();
+    });
+
 
 </script>
 <!-- LOAD HEADER & FOOTER -->
 <script>
-    (function($){
-        $(function(){
-           $('#head').load("./header.html");
+    (function ($) {
+        $(function () {
+            $('#head').load("./header.html");
         });
     })(jQuery);
 </script>
 
 <script>
-    (function($){
-        $(function(){
-           $('#foot').load("./footer.html");
+    (function ($) {
+        $(function () {
+            $('#foot').load("./footer.html");
         });
     })(jQuery);
 </script>

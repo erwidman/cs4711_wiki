@@ -24,6 +24,7 @@
         <div class="modal-content">
             <h4>Image Info:</h4>
             <p>Dimensions: <span class="img-dimensions"></span></p>
+            <b><p>filesize: <span class="img-size"></span> bytes</p></b>
             <p>Uploaded: <span class="img-uploaded"></span></p>
             <p>Uploaded By: <span class="img-uploaded-by"></span></p>
             <p>Comment: <span class="img-comment"></span></p>
@@ -115,7 +116,7 @@
                 console.log(result);
                 $('#article-title').html(result.title);
                 $('#article-content').html(result.content);
-                $('#article-author').html("Author Username: " + result.username);
+                $('#article-author').html("Author Username: " + ((result.username == null || result.username == '') ? 'anon' : result.username));
                 $('#article-last-update').html("Last Updated: " + result.lastUpdated);
                 if (result.isEditable == 0) {
                     $('#edit-article').addClass('disabled');
@@ -132,16 +133,22 @@
                         type: 'GET',
                         success: function (data) {
                             $('.img-dimensions').html(JSON.parse(data).dimensions);
+                            $('.img-size').html(JSON.parse(data).filesize);
                             $('.img-uploaded').html(JSON.parse(data).uploadTime);
-                            $('.img-uploaded-by').html(JSON.parse(data).username);
+                            $('.img-uploaded-by').html((JSON.parse(data).username == null ? 'Anon' : JSON.parse(data).username ));
                             $('.img-comment').html(JSON.parse(data).comment);
                             image_instance[0].open();
                         }
                     })
                 })
             },
-            error: args.failureCallback || function () {
-                alert("error in createArticle")
+            error: args.failureCallback || function (event) {
+                if(event.responseText == "{}"){
+                    $('html').html("<h1> You have been banned. </h1>")
+                }else{
+                    console.log()
+                    alert("error in getArticle")
+                }
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('authorization', args.password);
@@ -166,7 +173,7 @@
                 console.log(result);
                 var html = '<ul>';
                 for (var i = 0; i < result.length; i += 1) {
-                    html += '<li>' + result[i].newContent + '<br> By Username: ' + (result[i].username == null ? 'anon' : result[i].username) + '<br> Time:' + result[i].updateTime + '</li>'
+                    html += '<li>' + result[i].newContent + '<br> By Username: ' + ((result[i].username == null || result[i].username == '') ? 'anon' : result[i].username) + '<br> Time:' + result[i].updateTime + '</li>'
                 }
                 html += '</ul>';
                 $('#history').html(html);
@@ -186,8 +193,14 @@
                     })
                 })
             },
-            error: args.failureCallback || function () {
-                alert("error in createArticle")
+            error: args.failureCallback || function (event, request, settings) {
+                if(event.responseText == "{}"){
+                    $('html').html("<h1> You have been banned. </h1>")
+                }else{
+                    console.log()
+                    alert("error in createArticle")
+                }
+
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('authorization', args.password);

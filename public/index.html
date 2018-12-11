@@ -44,6 +44,26 @@
 
 <!-- LOAD HEADER & FOOTER -->
 <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/request?command=getUserID&0=' + 'banned?',
+            async: true,
+            success: function (result) {
+
+            },
+            error: function (event) {
+                if(event.responseText == "{}"){
+                    $('html').html("<h1> You have been banned. </h1>")
+                }else{
+
+                }
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('authorization', 0);
+            }
+        })
+    });
+
     (function($){
         $(function(){
            $('#head').load("./header.html");

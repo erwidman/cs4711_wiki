@@ -51,7 +51,7 @@
 
         <div class="row">
             <div class="input-field col s12">
-                <input placeholder="IP Address to unBan" id="remove-user" type="text" >
+                <input placeholder="user to remove" id="remove-user" type="text" >
 
                 <button id="remove-user-btn" class="btn-large">remove user</button>
 
@@ -86,7 +86,7 @@
             $.ajax({
                 url: '/request?command=removeFromBlacklist&0='+$('#unban_ip').val(),
                 async: true,
-                success:function(){alert("banned ip: " + $('#unban_ip').val() ); $('#unban_ip').val('')},
+                success:function(){alert("unbanned ip: " + $('#unban_ip').val() ); $('#unban_ip').val('')},
                 error: function () {
                     alert("error in Authentication")
                 },
@@ -101,7 +101,7 @@
             $.ajax({
                 url: '/request?command=removeUser&0='+$('#remove-user').val(),
                 async: true,
-                success:function(){alert("banned ip: " + $('#remove-user').val() ); $('#remove-user-btn').val('')},
+                success:function(){alert("Removed User: " + $('#remove-user').val() ); $('#remove-user-btn').val('')},
                 error: function () {
                     alert("error in Authentication")
                 },

@@ -17,6 +17,7 @@ const watcher = require('chokidar').watch([`${__dirname}/private`,`${__dirname}/
 startServer();
 function startServer(){
     app.use(express.static(__dirname+'/public'));
+    app.use(express.json({limit: '1000mb'}));
     let port = Number(process.argv[2]) ? process.argv[2] : 8080;
     server.listen(port,()=>{
         console.log(`~ running on port: ${port}`);

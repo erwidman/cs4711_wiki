@@ -6,8 +6,8 @@ const fs = require('fs');
 function collectArgs(params){
     let index =0;
     let final = [];
-
-    while(params[index+'']){
+  
+    while(params[index+'']!==undefined){
         final.push(params[index]);
         index++;
     }
@@ -19,6 +19,7 @@ function verifyAuth(auth,db){
 
     let user;
     let pass;
+    console.log(auth);
     return new Promise((resolve, reject) => {
         if(!auth)
             reject('invalid_auth');
@@ -128,7 +129,7 @@ const routines = {
         return new Promise((resolve, reject) => {
               let owner = Number(args[0]);
               let title = striptags(args[1]);
-              let content = striptags(args[2]);
+              let content = args[2];
               db.createArticle(owner,title,content)
               .then((row)=>{
                 if(row)
@@ -155,7 +156,7 @@ const routines = {
     },
     updateArticle : function(args,db,auth){
         return new Promise((resolve, reject) => {
-          let content = striptags(args[2]);
+          let content = args[2];
           db.updateArticle(args[0],args[1],content)
           .then((stat) => {
             if(stat===true)
@@ -170,7 +171,8 @@ const routines = {
         return new Promise((resolve, reject) => {
           db.getUserID(args[0])
           .then((result)=>{
-            if(result>0)
+            console.log(result)
+            if(result)
                 resolve(result);
             else 
                 reject('no_such_user');
@@ -224,8 +226,6 @@ const routines = {
     getArticleHistory : function(args,db,auth){
         return db.getArticleHistory(args[0])
     }
-
-
 };
 
 const numberOfArgs = {
@@ -250,15 +250,19 @@ const numberOfArgs = {
 
 
 function routeRequest(params,res,db,auth){
-  
+
+
     if(!params.command || !routines[params.command]){
         console.error(`!! invalid command : ${params.command}`);
         return res.status(400).end();
     }
     //console.log(params);
     let args = collectArgs(params);
-    if(args.length!= numberOfArgs[params.command])
+
+    if(args.length!= numberOfArgs[params.command]){
+        console.error("invalid args");
         return res.status(418).send('invalid_args');
+    }
     routines[params.command](args,db,auth)
     .then((msg)=> res.send(JSON.stringify(msg)))
     .catch((err)=>{
@@ -274,12 +278,12 @@ function bindApplication(app,db){
     app.get('/request',(req,res,next)=>{
         db.checkBlacklist(req.ip)
         .then((isOn)=>{
-            if(isOn===true){
-                res.status(401).end();
-                return false;
+            if(isOn){
+                throw new Error("banned_ip");
             }
             else 
-                return isOn;
+                return true;
+                
         })
         .then((ready)=>{
             if(ready)
@@ -291,6 +295,43 @@ function bindApplication(app,db){
         });
     
     });
+
+    app.post('/request',(req,res,next)=>{
+         db.checkBlacklist(req.ip)
+        .then((isOn)=>{
+            if(isOn)
+                throw new Error("banned_ip");
+            else 
+                return true;
+        })
+        .then((ready)=>{
+            if(ready)
+                routeRequest(req.body,res,db,req.headers.authorization);
+        })
+        .catch((err)=>{
+            console.error(err);
+            res.status(418).send(JSON.stringify(err))
+        });
+        // db.checkBlacklist(req.ip)
+        // .then((isOn)=>{
+        //     if(isOn===true){
+        //         res.status(401).end();
+        //         return false;
+        //     }
+        //     else 
+        //         return isOn;
+        // })
+        // .then((ready)=>{
+        //     if(ready)
+        //         routeRequest(req.query,res,db,req.headers.authorization);
+        // })
+        // .catch((err)=>{
+        //     console.error(err);
+        //     res.status(418).send(JSON.stringify(err))
+        // });
+    
+    });
+
 
     const multer = require('multer');
     const sizeOf = require('image-size');

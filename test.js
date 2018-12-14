@@ -39,7 +39,8 @@ describe("Working on dbInterface.js",function(){
 
     it("-Testing getUserId",async function(){
         let result = await db.getUserID("zigzig");
-        assert.equal(result>0,true);
+        console.log(result);
+        expect(result).to.have.property('userid')
     });
 
     it("-Testing login functions",async function(){
@@ -70,13 +71,13 @@ describe("Working on dbInterface.js",function(){
     });
 
     it("-Testing create article, lock article, and update article",async function(){
-        db.createArticle(200,"Another article","sl");
+        db.createArticle(782,"Another article","sl");
         db.createArticle(2034,"Still article","sl");
         let artid = await db.createArticle(44,"Test Article","This is a test. This is a test");
         assert.equal(artid>0,true);
         let result = await db.lockArticle(artid);
         assert.equal(result,true);
-        result = await db.updateArticle(1000,artid,"This is the replaced test");
+        result = await db.updateArticle(780,artid,"This is the replaced test");
         assert.equal(result,true);
         result = await db.getAllArticles();
         assert.equal(Array.isArray(result),true);
@@ -119,7 +120,7 @@ describe("Working appBinding.js",function(){
 
     it("-check anon exist",async function(){
         let id = await db.getUserID('anon');
-        assert(id>=0,true);
+        expect(id).to.have.property('userid')
     });
 
     it("-createUser",async function(){
@@ -167,13 +168,15 @@ describe("Working appBinding.js",function(){
         res = await createRequest('getArticle',[id],"");
         expect(res.data).to.have.property('articleid');
         res = await createRequest('getArticleHistory',[id],"");
+        console.log(res.data);
         expect(res.data[0]).to.have.property('articleid');
 
     });
 
     it("-getUserid",async function(){
-        let res = await createRequest('getUserID',['zigzig'],'');
-        assert(res.data>0);
+        let res = await createRequest('getUserID',['zigzig'],'zigzig | 1234');
+        console.log(res.data);
+        expect(res.data).to.have.property('userid');
     });
 
     it("-addImage, getIm age",async function(){
@@ -198,8 +201,6 @@ describe("Working appBinding.js",function(){
     });
 
     
-
-
 
 
     after(function(){

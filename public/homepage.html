@@ -11,16 +11,11 @@
 </head>
 
 <body>
-    <header>
-        <nav class="light-blue lighten-1" role="navigation">
-            <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Wiki wiki whaaaaat?</a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="./functions.html">functions</a></li>
-                </ul>
-            </div>
-        </nav>
 
-    </header>
+ 
+ <!-- LOAD HEADER -->
+<div class = "head" id="head"></div>
+
 
     <div class="section" id="index-banner">
         <div class="container">
@@ -43,4 +38,26 @@
         </div>
     </div>
 
+
+	<!-- LOAD FOOTER -->
+<div class = "foot" id="foot"></div>
+	
 </body>
+
+<!-- LOAD HEADER & FOOTER -->
+<script>
+    (function($){
+        $(function(){
+           $('#head').load("./header.html");
+        });
+    })(jQuery);
+</script>
+
+<script>
+    (function($){
+        $(function(){
+           $('#foot').load("./footer.html");
+        });
+    })(jQuery);
+</script>
+

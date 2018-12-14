@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+
+<body style>
+
+<div class="row">
+<form class="col s12">
+<div class="row">
+
+	<div>
+       <a class=" modal-trigger" href="#login">Log in</a>
+
+   </div>
+
+	<div id="login" class="modal">
+		<div class="modal-content">
+			<div class="row">
+				<h4 class="col s6 black-text"> Log in</h4>
+				<h4 class="col s6 right-align btn-flat modal-close">Cancel</h4>
+			</div>
+
+			<div class="row">
+			<div class="input-field col s12">
+				<input placeholder="email" id="login-user-email" type="email" class="validate">
+				<label for="login-user-email">email</label>
+			</div>
+			</div>
+
+			<div class="row">
+			<div class="input-field col s12">
+				<input placeholder="Password" id="login-user-password" type="password" class="validate">
+				<label for="login-user-password">password</label>
+			</div>
+			</div>
+
+			<div class="row">
+			<div class="col s12">
+				<a class= "modal-close modal-trigger black-text" type="text" href="#create">Create new Account</a>
+			</div>
+			</div>
+				<a href="javascript:;" id="login-user-button"
+				class="btn-large waves-effect waves-light blue">Log in</a>
+		</div>
+	</div>
+
+	<div id="create" class="modal">
+		<div class="modal-content">
+			<div class="row">
+				<h4 class="col s6 black-text">Create Account</h4>
+				<h4 class="col s6 right-align btn-flat modal-close">Cancel</h4>
+			</div>
+
+			<div class="row">
+			<div class="input-field col s12">
+				<input placeholder="email" id="create-user-email" type="email" class="validate">
+				<label for="create-user-email">email</label>
+			</div>
+			</div>
+
+			<div class="row">
+			<div class="input-field col s12">
+				<input placeholder="Password" id="create-user-password" type="password" class="validate">
+				<label for="create-user-password">password</label>
+			</div>
+			</div>
+
+			<a href="javascript:;" id="create-user-button"
+			class="btn-large waves-effect waves-light blue">Create Account</a>
+	</div>
+</form>
+</div>
+
+<!--
+	Added some new files for creating the modal, may remove later
+ -->
+
+
+
+
+
+<script src="js/functions.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems, {});
+    });
+</script>
+</body>
+</html>

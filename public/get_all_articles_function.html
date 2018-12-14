@@ -4,15 +4,34 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!--example article http://127.0.0.1:8080/get_article_function.html?articleid=1403-->
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
+
 <body>
+
+
+<!-- LOAD HEADER -->
+<div class = "head" id="head"></div>
 
 <ul id="article-list" class="collection">
 
-</ul>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+
+</ul>
+
+<a class="btn waves-effect waves-light orange" href="./add_article_function.html" type="submit" id="update-article-editor">Add Article
+    <i class="material-icons right">send</i>
+</a>
+
+<!-- LOAD FOOTER -->
+<div class = "foot" id="foot"></div>
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/materialize.min.js"></script>
 <script src="js/functions.js"></script>
 
 <script>
@@ -43,8 +62,22 @@
             }
         })
     }
-
-
-
 </script>
+<!-- LOAD HEADER & FOOTER -->
+<script>
+    (function($){
+        $(function(){
+           $('#head').load("./header.html");
+        });
+    })(jQuery);
+</script>
+
+<script>
+    (function($){
+        $(function(){
+           $('#foot').load("./footer.html");
+        });
+    })(jQuery);
+</script>
+
 </html>

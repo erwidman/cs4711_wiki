@@ -2,57 +2,173 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <title>Add article</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
+
+<!-- LOAD HEADER -->
+<div class = "head" id="head"></div>
+
+
+
+
+<div class="container">
+    <div class="row center">
+        <br>
+        <div class="input-field col s12">
+            <input id="article-title" type="text">
+            <label for="article-title" class="active">Article Title</label>
+            <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+            <div id="editor"></div>
+            <div id="images" class="row">
+                <form class="col s12 user-image">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>Image</span>
+                            <input type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input name="wiki_image" class="file-path validate" accept="image/*" type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea name="comment" id="textarea1" class="materialize-textarea"></textarea>
+                            <label for="textarea1">Image Description</label>
+                        </div>
+                    </div>
+                    <input id="owner" type="hidden" name="owner" value='0'/>
+                </form>
+            </div>
+            <button class="btn waves-effect waves-light orange" type="submit" id="add-image">
+                Add Image
+            </button>
+            <br><br>
+            <button class="btn waves-effect waves-light orange" type="submit" id="create-article-editor">Create
+                Article
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- LOAD FOOTER -->
+<div class = "foot" id="foot"></div>
+
+
+<!-- Previous
 <label for="article-title">Article Title</label>
 <input type="text" id="article-title">
 <br>
-<div id="editor">
+<button id="create-article-editor">Create Article</button> -->
 
-</div>
-
-<button id="create-article-editor">Create Article</button>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+<script src="js/materialize.min.js"></script>
 <script src="js/functions.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+
+    var images = 2;
     var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
 
-        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-        [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-        [{ 'direction': 'rtl' }],                         // text direction
+        [{'header': 1}, {'header': 2}],               // custom button values
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+        [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
+        [{'direction': 'rtl'}],                         // text direction
 
-        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [ 'link', 'image', 'video', 'formula' ],          // add's image support
-        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-        [{ 'font': [] }],
-        [{ 'align': [] }],
+        [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
+        [{'header': [1, 2, 3, 4, 5, 6, false]}],
+        ['link', 'video', 'formula'],          // add's image support
+        [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+        [{'font': []}],
+        [{'align': []}],
 
-        ['clean']                                         // remove formatting button
+        ['clean']
+        // remove formatting button
     ];
+
+
+
+
     var quill = new Quill('#editor', {
         modules: {
-            toolbar: toolbarOptions
+            toolbar: toolbarOptions,
         },
         theme: 'snow'
     });
+    var images_ids = [];
+    $('#create-article-editor').on('click', function () {
+        var images_html = '';
 
-    $('#create-article-editor').on('click', function(){
+        $('.user-image').each(function(idx, imgForm){
+            var data = new FormData();
+            data.append( 'wiki_image',$(imgForm).find('input')[0].files[0] );
+            if($(imgForm).find('input')[0].files.length === 0){
+                return;
+            }
+            data.append('comment',  $($(imgForm).find('textarea')[0]).val());
+            data.append('owner',  (localStorage.getItem('id')? localStorage.getItem('id') : 0 )  );
+
+            console.log(data, (localStorage.getItem('id')? localStorage.getItem('id') : 0 ) )
+            $.ajax({
+                mimeType: 'multipart/form-data',
+                url: '/image',
+                data: data,
+                async: false,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function ( data ) {
+                    images_ids.push(JSON.parse(data).id);
+                    images_html += '<br><img style="" class="user-image" data-id="'+JSON.parse(data).id+'" src="/imgs/'+JSON.parse(data).id+'.'+ $(imgForm).find('input')[0].files[0].name.split('.').pop()+'"><br><p>'+ $($(imgForm).find('textarea')[0]).val()+'</p><br>'
+                    console.log("in success images html", images_html)
+                }
+            })
+        });
+        console.log("images html", images_html)
         var args = {
-            content: quill.container.firstChild.innerHTML,
-            title: $('#article-title').val()
+            // content: '<div class="col s9">'+quill.container.firstChild.innerHTML+'</div><div class="col s3">'+images_html+'</div>',
+            content: '<div class="col s9">'+quill.container.firstChild.innerHTML+'</div><div class="user-image-div">'+images_html+'</div>',
+
+            title: $('#article-title').val(),
+            owner: localStorage.getItem("id"),
+            password: localStorage.getItem("password")
         }
         createArticle(args)
     });
+    if (localStorage.getItem('id')) {
+        $('#owner').val(localStorage.getItem('id'))
+    }
+    $('#add-image').on('click', function () {
+        images += 1;
+        $('#images').append(
+            '<form class="col s12 user-image">\n' +
+            '                    <div class="file-field input-field">\n' +
+            '                        <div class="btn">\n' +
+            '                            <span>Image</span>\n' +
+            '                            <input type="file">\n' +
+            '                        </div>\n' +
+            '                        <div class="file-path-wrapper">\n' +
+            '                            <input name="wiki_image"  class="file-path validate"  accept="image/*" type="text">\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                    <div class="row">\n' +
+            '                        <div class="input-field col s12">\n' +
+            '                            <textarea name="comment" id="textarea' + images + '" class="materialize-textarea"></textarea>\n' +
+            '                            <label for="textarea' + images + '">Image Description</label>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                    <input id="owner" type="hidden" name="owner" value="' + (localStorage.getItem('id') ? localStorage.getItem('id') : 0) + '" />\n' +
+            '                </form>'
+        )
+    })
+
     /**
      *
      * @param args {object}
@@ -62,20 +178,41 @@
      * @param [args.successCallback] - functions used when ajax is successful
      * @param [args.failureCallback] - functions used when ajax fails
      */
-    function createArticle(args){
+    function createArticle(args) {
+
         $.ajax({
-            url: '/request?command=createArticle&0='+ (args.owner || 0)+'&1='+args.title+'&2='+args.content,
-            async: true,
-            success: function(result){
-                location.href = '/get_article_function.html?articleid='+result;
+            url: '/request?command=createArticle&0=' + (args.owner || 0) + '&1=' + args.title + '&2=' + (args.content),
+            async: false,
+            success: function (result) {
+                location.href = '/get_article_function.html?articleid=' + result;
             },
-            error: args.failureCallback || function () {
+            error:function () {
                 alert("error in createArticle")
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('authorization', args.password);
             }
-        })
+        });
+        var data = new FormData();
     }
+
 </script>
+
+<!-- LOAD HEADER & FOOTER -->
+<script>
+    (function($){
+        $(function(){
+           $('#head').load("./header.html");
+        });
+    })(jQuery);
+</script>
+
+<script>
+    (function($){
+        $(function(){
+           $('#foot').load("./footer.html");
+        });
+    })(jQuery);
+</script>
+
 </html>

@@ -124,7 +124,10 @@ function login(username,password){
                 rej(err);
             }
             else{
-                res(arow.password);
+                if(arow && arow.password)
+                    res(arow.password);
+                else 
+                    rej('no_such_user');
             }
            
         });
@@ -161,19 +164,19 @@ function addToBlacklist(ip){
 }
 
 function checkBlacklist(ip){
-    return new Promise((res,rej)=>checkExistSQL('select * from ipBlacklist where ip=?',[ip],'ipaddr',res,rej));
+    return new Promise((res,rej)=>checkExistSQL('select * from ipBlacklist where ipaddr=?',[ip],'ipaddr',res,rej));
 }
 
 function getUserID(username){
     let db = getDB();
     return new Promise((res,rej)=>{
-        db.get('select userid from users where username=?',[username],(err,row)=>{
+        db.get('select userid, isAdmin from users where username=?',[username],(err,row)=>{
             if(err){
                 console.error(err);
                 res(false);
             }
             else
-                res(row.userid);
+                res(row);
         });
     });
     
@@ -288,7 +291,7 @@ function deleteImage(imageid){
 //_______________________________GETTERS
 
 function getImage(imageid){
-    return new Promise((res,rej)=>getRowSQL('select * from images where imageid=?',[imageid],'imageid',res,rej));
+    return new Promise((res,rej)=>getRowSQL('select * from images left join users on images.owner=users.userid where imageid=?',[imageid],'imageid',res,rej));
 }
 
 function getAllImages(){
@@ -300,11 +303,11 @@ function getAllArticles(){
 }
 
 function getArticle(articleid){
-    return new Promise((res,rej)=> getRowSQL('select * from articles where articleid=?',[articleid],'articleid',res,rej));
+    return new Promise((res,rej)=> getRowSQL('select * from articles LEFT JOIN users on articles.owner = users.userid where articleid=?',[articleid],'articleid',res,rej));
 }
 
 function getArticleHistory(articleid){
-    return new Promise((res,rej)=>getAllSQL('select * from articleHistory where articleid=?',[articleid],res,rej));
+    return new Promise((res,rej)=>getAllSQL('select articleid, articleHistory.userid, updateTime, newContent, username, lastOnline, isAdmin from articleHistory left JOIN users on articleHistory.userid=users.userid where articleid=?',[articleid],res,rej));
 }
 
 

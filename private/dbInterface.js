@@ -124,7 +124,7 @@ function login(username,password){
                 rej(err);
             }
             else{
-                if(arow.password)
+                if(arow && arow.password)
                     res(arow.password);
                 else 
                     rej('no_such_user');

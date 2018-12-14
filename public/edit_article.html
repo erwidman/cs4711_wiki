@@ -14,58 +14,36 @@
 
 </head>
 <body>
+    <header>
+        <nav class="light-blue lighten-1" role="navigation">
+            <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Wiki wiki whaaaaat?</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="./functions.html">functions</a></li>
+                </ul>
+            </div>
+        </nav>
 
-<!-- LOAD HEADER -->
-<div class = "head" id="head"></div>
+    </header>
 
+
+<div id="article-editor">
+
+</div>
 <div class="container">
-    <div class="row center">
-        <br>
-        <div class="input-field col s12">
-            <input id="article-title" type="text">
-            <label for="article-title" class="active">Article Title</label>
-
-            <div id="article-editor">
-
-            </div>
-            <div id="images" class="row">
-                <form class="col s12 user-image">
-                    <div class="file-field input-field">
-                        <div class="btn">
-                            <span>Image</span>
-                            <input type="file">
-                        </div>
-                        <div class="file-path-wrapper">
-                            <input name="wiki_image" class="file-path validate" accept="image/*" type="text">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <textarea name="comment" id="textarea1" class="materialize-textarea"></textarea>
-                            <label for="textarea1">Image Description</label>
-                        </div>
-                    </div>
-                    <input id="owner" type="hidden" name="owner" value='0'/>
-                </form>
-            </div>
-            <button class="btn waves-effect waves-light orange" type="submit" id="add-image">
-                Add Image
-            </button>
-            <br><br>
-            <button class="btn waves-effect waves-light orange" type="submit" id="update-article-editor">Update Article
-                <i class="material-icons right">send</i>
-            </button>
-        </div>
-
+<div class="row center">
+    <br>
+    <div class="input-field col s12">
+        <input id="article-title" type="text">
+        <label for="article-title" class="active">Article Title</label>
+        <button class="btn waves-effect waves-light orange" type="submit" id="update-article-editor">Update Article
+            <i class="material-icons right">send</i>
+        </button>
     </div>
 </div>
+</div>
 
-<!-- LOAD FOOTER -->
-<div class = "foot" id="foot"></div>
+<!-- The stuff
 
-</body>
-<!--
-Previous version
 <body>
 <label for="article-title">Article Title</label>
 <input type="text" id="article-title">
@@ -76,6 +54,7 @@ Previous version
 
 <button id="update-article-editor">Update Article</button>
 </body> -->
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/materialize.min.js"></script>
@@ -230,6 +209,7 @@ Previous version
     })(jQuery);
 </script>
 
+
 <script>
     (function($){
         $(function(){
@@ -237,5 +217,6 @@ Previous version
         });
     })(jQuery);
 </script>
+
 
 </html>
